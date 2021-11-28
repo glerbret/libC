@@ -1,11 +1,12 @@
 /**
-   \author Grégory Lerbret
-   \file	traces.gen
-   \brief Fichier de traces
-   \date 07/04/2005
-   \version 1.0
+ * @author Gregory Lerbret
+ * @brief Fichier de traces
+ * @date 07/04/2005
+ * @version 1.0
+ */
 
-      Niveau de trace
+/*
+    Niveau de trace
       |           Chaine associee
       |           |
       |           |

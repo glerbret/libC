@@ -1,10 +1,10 @@
 /**
-   \author Grégory Lerbret
-   \file bool.h
-   \brief Type booleen.<br>
-   \date 06/04/2005
-   \version 1.0
-*/
+ * @author Gregory Lerbret
+ * @file
+ * @brief Type booleen
+ * @date 06/04/2005
+ * @version 1.0
+ */
 
 #ifndef GL_BOOL_H
 #define GL_BOOL_H
