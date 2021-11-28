@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="test" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="./exe/test.exe" prefix_auto="0" extension_auto="0" />
+				<Option object_output="./obj/exe" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="default;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Os" />
+			<Add option="-Wmain" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add option="-W" />
+			<Add option="-Wwrite-strings -Wstrict-prototypes -Wuninitialized -Wno-missing-braces" />
+			<Add directory="./gen" />
+			<Add directory="./test" />
+			<Add directory="./inc" />
+		</Compiler>
+		<Linker>
+			<Add library="lib/libperso.a" />
+		</Linker>
+		<Unit filename="test/maintest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/test.h" />
+		<Unit filename="test/testbcd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testbits.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testclist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testdate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testini.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testlist.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testluhn.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testmodulus97.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testopt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/testqueue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/teststack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/teststr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
