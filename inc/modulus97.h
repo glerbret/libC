@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Calcul et de controle des modulo 97
- * @date 07/05/2007
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_MODULUS97_H

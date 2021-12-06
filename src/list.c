@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion de listes
- * @date 24/09/2006
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "list.h"

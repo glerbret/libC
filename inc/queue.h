@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Gestion de files
- * @date 24/09/2006
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_QUEUE_H

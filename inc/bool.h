@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Type booleen
- * @date 06/04/2005
  * @version 1.0
+ * @copyright MIT license
  */
 
 #ifndef GL_BOOL_H

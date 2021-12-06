@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion de dates
- * @date 07/04/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "date.h"

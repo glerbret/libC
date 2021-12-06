@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion des fichiers au format ini
- * @date 06/04/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "ini.h"

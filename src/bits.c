@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion des bits
- * @date 02/05/2008
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "bits.h"

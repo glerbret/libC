@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion des impressions formattees
- * @date 20/08/2008
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "print.h"

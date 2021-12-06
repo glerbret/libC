@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion du chaset EBCDIC
- * @date 14/12/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "ebcdic.h"

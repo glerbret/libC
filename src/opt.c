@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion des options en ligne de commande
- * @date 13/04/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "opt.h"

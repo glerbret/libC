@@ -4,8 +4,8 @@
  * @brief Gestion des processus
  *        Ce fichier fournie une interface uniforme pour la gestion des processus encapsulant les appels aux fonctions systemes
  *        dependantes de la cible
- * @date 20/08/2008
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_PROCESSUS_H

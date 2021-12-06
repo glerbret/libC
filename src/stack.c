@@ -1,8 +1,8 @@
 /**
  * @author Gregory Lerbret
  * @brief Gestion de piles
- * @date 24/09/2006
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #include "stack.h"

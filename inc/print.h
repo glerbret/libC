@@ -4,8 +4,8 @@
  * @brief Gestion des impressions formattees
  *        Ce fichier fournie une encapsulation aux fonctions du type snprintf() afin de presenter une interface uniforme independante
  *        des fonctions reellement implementees sur la cible
- * @date 20/08/2008
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_PRINT_H

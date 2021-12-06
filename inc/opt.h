@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Gestion des options en ligne de commande
- * @date 13/04/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_OPT_H

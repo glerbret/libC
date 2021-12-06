@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Fichier de traces
- * @date 07/04/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_TRACE_H

@@ -2,8 +2,8 @@
  * @author Gregory Lerbret
  * @file
  * @brief Gestion de nombres au format BCD
- * @date 14/12/2005
  * @version 1.0.0
+ * @copyright MIT license
  */
 
 #ifndef GL_BCD_H
