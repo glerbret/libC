@@ -42,16 +42,16 @@ int DATE_Version(void);
 /**
  * @brief Lecture de la date actuelle
  *
- * @param[out] pcDate Date courante
- * @param[in] szLgDate Taille maximal de la date
- * @param[in] pcFormat Format de la date
+ * @param[out] date Date courante
+ * @param[in] dateSize Taille maximal de la date
+ * @param[in] format Format de la date
  *
  * @return
  *  - DATE_OK : la date a ete lue et formatee avec succes
  *  - DATE_READ_ERROR : erreur de lecture de la date
  *  - DATE_CONV_ERROR : erreur de formatage de la date
  */
-DATE_Res_e DATE_GetTodayDate(char* pcDate, size_t szLgDate, const char* pcFormat);
+DATE_Res_e DATE_GetTodayDate(char* date, size_t dateSize, const char* format);
 
 #ifdef __cplusplus
 }

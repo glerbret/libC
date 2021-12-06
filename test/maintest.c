@@ -5,58 +5,58 @@
 
 int main(void)
 {
-    int iResult = 0;
+    int result = 0;
 
     if(TstLuhn() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstStr() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstIni() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstDate() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstOpt() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstBcd() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstStack() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstQueue() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstList() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstCList() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstModulus97() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
     if(TstBits() != 0)
     {
-        iResult = 1;
+        result = 1;
     }
 
-    if(iResult == 0)
+    if(result == 0)
     {
         printf("\n\nTests OK\n");
     }

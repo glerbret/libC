@@ -6,20 +6,20 @@
 
 typedef struct
 {
-    unsigned char   ucOriginalByte;
-    unsigned char   ucFinalByte;
-    size_t          szBitNumber;
-    bool            bBitPresent;
+    unsigned char   originalByte;
+    unsigned char   finalByte;
+    size_t          bitNumber;
+    bool            bitPresent;
 } TestBits_s;
 
 int TstBits(void)
 {
-    int iResult = 0;
-    size_t szIdx;
+    int result = 0;
+    size_t idx;
 
     /* Test de la fonction BITS_SetBit */
     {
-        TestBits_s asSetBits[] =
+        TestBits_s setBits[] =
         {
             {0x00,   0x01,    0,    false},
             {0x03,   0x83,    7,    false},
@@ -27,23 +27,23 @@ int TstBits(void)
             {0x00,   0x00,    9,    false}
         };
 
-        for(szIdx = 0; szIdx < (sizeof(asSetBits) / sizeof(asSetBits[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(setBits) / sizeof(setBits[0])); idx++)
         {
-            if(BITS_SetBit(asSetBits[szIdx].ucOriginalByte, asSetBits[szIdx].szBitNumber) == asSetBits[szIdx].ucFinalByte)
+            if(BITS_SetBit(setBits[idx].originalByte, setBits[idx].bitNumber) == setBits[idx].finalByte)
             {
-                printf("(BITS_SetBit) test %d OK\n", (int)(szIdx + 1));
+                printf("(BITS_SetBit) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(BITS_SetBit) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(BITS_SetBit) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
     /* Test de la fonction BITS_ClearBit */
     {
-        TestBits_s asClearBits[] =
+        TestBits_s clearBits[] =
         {
             {0x01,   0x00,    0,    false},
             {0x83,   0x03,    7,    false},
@@ -51,46 +51,46 @@ int TstBits(void)
             {0xFF,   0xFF,    9,    false}
         };
 
-        for(szIdx = 0; szIdx < (sizeof(asClearBits) / sizeof(asClearBits[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(clearBits) / sizeof(clearBits[0])); idx++)
         {
-            if(BITS_ClearBit(asClearBits[szIdx].ucOriginalByte, asClearBits[szIdx].szBitNumber) == asClearBits[szIdx].ucFinalByte)
+            if(BITS_ClearBit(clearBits[idx].originalByte, clearBits[idx].bitNumber) == clearBits[idx].finalByte)
             {
-                printf("(BITS_ClearBit) test %d OK\n", (int)(szIdx + 1));
+                printf("(BITS_ClearBit) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(BITS_ClearBit) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(BITS_ClearBit) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
     /* Test de la fonction BITS_TestBit */
     {
-        TestBits_s asTestBits[] =
+        TestBits_s testBits[] =
         {
             {0x01,   0x01,    0,    true},
             {0x03,   0x03,    7,    false},
             {0xFF,   0xFF,    9,    false}
         };
 
-        for(szIdx = 0; szIdx < (sizeof(asTestBits) / sizeof(asTestBits[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(testBits) / sizeof(testBits[0])); idx++)
         {
-            if(BITS_TestBit(asTestBits[szIdx].ucOriginalByte, asTestBits[szIdx].szBitNumber) == asTestBits[szIdx].bBitPresent)
+            if(BITS_TestBit(testBits[idx].originalByte, testBits[idx].bitNumber) == testBits[idx].bitPresent)
             {
-                printf("(BITS_TestBit) test %d OK\n", (int)(szIdx + 1));
+                printf("(BITS_TestBit) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(BITS_TestBit) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(BITS_TestBit) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
     /* Test de la fonction BITS_ReverseBit */
     {
-        TestBits_s asReverseBits[] =
+        TestBits_s reverseBits[] =
         {
             {0x80,   0x01,    0,    false},
             {0xF0,   0x0F,    0,    false},
@@ -99,19 +99,19 @@ int TstBits(void)
             {0xFF,   0xFF,    0,    false}
         };
 
-        for(szIdx = 0; szIdx < (sizeof(asReverseBits) / sizeof(asReverseBits[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(reverseBits) / sizeof(reverseBits[0])); idx++)
         {
-            if(BITS_ReverseBit(asReverseBits[szIdx].ucOriginalByte) == asReverseBits[szIdx].ucFinalByte)
+            if(BITS_ReverseBit(reverseBits[idx].originalByte) == reverseBits[idx].finalByte)
             {
-                printf("(BITS_ReverseBit) test %d OK\n", (int)(szIdx + 1));
+                printf("(BITS_ReverseBit) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(BITS_ReverseBit) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(BITS_ReverseBit) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
-    return iResult;
+    return result;
 }

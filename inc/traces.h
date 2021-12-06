@@ -42,10 +42,10 @@ int TRACE_Version(void);
 /**
  * @brief Ajout d'une trace dans le fichier LogXXXX (XXXXX represente la date du jour)
  *
- * @param[in] eNiveau Niveau de la trace
- * @param[in] pcFormat Format de la trace
+ * @param[in] level Niveau de la trace
+ * @param[in] format Format de la trace
  */
-void TRACE_ReportTrace(TRACE_Niveau_e eNiveau, const char *pcFormat, ... );
+void TRACE_ReportTrace(TRACE_Niveau_e level, const char* format, ... );
 
 #ifdef __cplusplus
 }

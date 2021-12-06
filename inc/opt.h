@@ -48,17 +48,17 @@ int OPT_Version(void);
  * @brief Analyse des options fournis au programme
  *        A chaque appel, la fonction retourne une des options geres
  *
- * @param[in] iNbArg Nombre d'arguments fournis au programme
+ * @param[in] argc Nombre d'arguments fournis au programme
  * @param[in] pacArg Arguments fournis au programme
- * @param[out] pcData Donnee liee a l'argument
- * @param[in] pcOpt Liste des options a traiter (une option suivi de : indique que l'option accepte des donnees)
- * @param[in] iFlag Flag de traitement (OPT_FLG_RESET remet a 0 le compteur, l'analyse recommence au premier argument)
+ * @param[out] data Donnee liee a l'argument
+ * @param[in] opt Liste des options a traiter (une option suivi de : indique que l'option accepte des donnees)
+ * @param[in] flags Flag de traitement (OPT_FLG_RESET remet a 0 le compteur, l'analyse recommence au premier argument)
  *
  * @return
  *  - La position de l'option si une option est trouvee
  *  - OPT_END sinon
  */
-int OPT_GetOpt(int iNbArg, const char *pacArg[], const char **pcData, const char* pcOpt, int iFlag);
+int OPT_GetOpt(int argc, const char *argv[], const char **data, const char* opt, int flags);
 
 #ifdef __cplusplus
 }

@@ -29,57 +29,57 @@ int BITS_Version(void)
     return BITS_VERS_MAJ * 10000 + BITS_VERS_MIN * 100 + BITS_VERS_BRCH;
 }
 
-unsigned char BITS_SetBit(unsigned char ucByte, size_t szBitNumber)
+unsigned char BITS_SetBit(unsigned char byte, size_t bitNumber)
 {
-    if(szBitNumber < CHAR_BIT)
+    if(bitNumber < CHAR_BIT)
     {
         /* Le bit n'est positionne que s'il appartient bien au byte */
-        ucByte |= (1 << szBitNumber);
+        byte |= (1 << bitNumber);
     }
 
-    return ucByte;
+    return byte;
 }
 
-unsigned char BITS_ClearBit(unsigned char ucByte, size_t szBitNumber)
+unsigned char BITS_ClearBit(unsigned char byte, size_t bitNumber)
 {
-    if(szBitNumber < CHAR_BIT)
+    if(bitNumber < CHAR_BIT)
     {
         /* Le bit n'est modifie que s'il appartient bien au byte */
-        ucByte &= ~(1 << szBitNumber);
+        byte &= ~(1 << bitNumber);
     }
 
-    return ucByte;
+    return byte;
 }
 
-bool BITS_TestBit(unsigned char ucByte, size_t szBitNumber)
+bool BITS_TestBit(unsigned char byte, size_t bitNumber)
 {
-    bool  bBitIPresent = false;
+    bool isPresent = false;
 
-    if(szBitNumber < CHAR_BIT)
+    if(bitNumber < CHAR_BIT)
     {
-        if((ucByte & (1 << szBitNumber)) == 0x00)
+        if((byte & (1 << bitNumber)) == 0x00)
         {
-            bBitIPresent = false;
+            isPresent = false;
         }
         else
         {
-            bBitIPresent = true;
+            isPresent = true;
         }
     }
     else
     {
         /* Le bit teste n'appartient pas au byte, il n'est donc pas present */
-        bBitIPresent = false;
+        isPresent = false;
     }
 
-    return bBitIPresent;
+    return isPresent;
 }
 
-unsigned char BITS_ReverseBit(unsigned char ucByte)
+unsigned char BITS_ReverseBit(unsigned char byte)
 {
-    ucByte = (ucByte << 4) | (ucByte >> 4);
-    ucByte = ((ucByte << 2) & 0xCC) | ((ucByte >> 2) & 0x33);
-    ucByte = ((ucByte << 1) & 0xAA) | ((ucByte >> 1) & 0x55);
+    byte = (byte << 4) | (byte >> 4);
+    byte = ((byte << 2) & 0xCC) | ((byte >> 2) & 0x33);
+    byte = ((byte << 1) & 0xAA) | ((byte >> 1) & 0x55);
 
-    return ucByte;
+    return byte;
 }

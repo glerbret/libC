@@ -27,20 +27,20 @@ int EBCDIC_Version(void);
 /**
  * @brief Conversion ASCI vers EBCDIC
  *
- * @param[in] iASCII Caractere au format ASCII
+ * @param[in] ascii Caractere au format ASCII
  *
  * @return Caractere au format EBCDIC.
  */
-int EBCDIC_ConvertASCII2EBCDIC(int iASCII);
+int EBCDIC_ConvertASCII2EBCDIC(int ascii);
 
 /**
  * @brief Conversion EBCDIC vers ASCII
  *
- * @param[in] iEBCDIC Caractere au format EBCDIC
+ * @param[in] ebcdic Caractere au format EBCDIC
  *
  * @return Caractere au format ASCII
  */
-int EBCDIC_ConvertEBCDIC2ASCII(int iEBCDIC);
+int EBCDIC_ConvertEBCDIC2ASCII(int ebcdic);
 
 #ifdef __cplusplus
 }

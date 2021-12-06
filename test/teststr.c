@@ -6,22 +6,22 @@
 
 typedef struct
 {
-    const char* pcSrc;
-    const char* pcDest;
-    char        cChar;
+    const char* src;
+    const char* dst;
+    char        character;
 } twostring_s;
 
 int TstStr(void)
 {
-    int iResult = 0;
-    size_t szIdx;
-    char acOut[10];
+    int result = 0;
+    size_t idx;
+    char output[10];
 
     printf("\nTest de \"%s\"\n", STR_Identifier());
 
     /* test de la fonction STR_DelChar */
     {
-        twostring_s asDelCharString[] =
+        twostring_s delCharString[] =
         {
             {"", "", ':' },
             {"  :  ", "    ", ':' },
@@ -47,41 +47,41 @@ int TstStr(void)
         else
         {
             printf("(STR_DelChar) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_DelChar(acOut, NULL, sizeof acOut, ':') == NULL)
+        if(STR_DelChar(output, NULL, sizeof output, ':') == NULL)
         {
             printf("(STR_DelChar) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_DelChar) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_DelChar(acOut, "abc", 0, ':') == NULL)
+        if(STR_DelChar(output, "abc", 0, ':') == NULL)
         {
             printf("(STR_DelChar) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_DelChar) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(asDelCharString) / sizeof(asDelCharString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(delCharString) / sizeof(delCharString[0])); idx++)
         {
-            STR_DelChar(acOut, asDelCharString[szIdx].pcSrc, sizeof acOut, asDelCharString[szIdx].cChar);
-            if(strcmp(acOut, asDelCharString[szIdx].pcDest) == 0)
+            STR_DelChar(output, delCharString[idx].src, sizeof output, delCharString[idx].character);
+            if(strcmp(output, delCharString[idx].dst) == 0)
             {
-                printf("(STR_DelChar) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_DelChar) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_DelChar) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_DelChar) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -114,41 +114,41 @@ int TstStr(void)
         else
         {
             printf("(STR_Strip) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_Strip(acOut, NULL, sizeof acOut) == NULL)
+        if(STR_Strip(output, NULL, sizeof output) == NULL)
         {
             printf("(STR_Strip) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_Strip) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_Strip(acOut, "abc", 0) == NULL)
+        if(STR_Strip(output, "abc", 0) == NULL)
         {
             printf("(STR_Strip) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_Strip) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(asStripString) / sizeof(asStripString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(asStripString) / sizeof(asStripString[0])); idx++)
         {
-            STR_Strip(acOut, asStripString[szIdx].pcSrc, sizeof acOut);
-            if(strcmp(acOut, asStripString[szIdx].pcDest) == 0)
+            STR_Strip(output, asStripString[idx].src, sizeof output);
+            if(strcmp(output, asStripString[idx].dst) == 0)
             {
-                printf("(STR_Strip) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_Strip) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_Strip) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_Strip) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -169,41 +169,41 @@ int TstStr(void)
         else
         {
             printf("(STR_String2Lower) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_String2Lower(acOut, NULL, sizeof acOut) == NULL)
+        if(STR_String2Lower(output, NULL, sizeof output) == NULL)
         {
             printf("(STR_String2Lower) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_String2Lower) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_String2Lower(acOut, NULL, 0) == NULL)
+        if(STR_String2Lower(output, NULL, 0) == NULL)
         {
             printf("(STR_String2Lower) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_String2Lower) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(as2LowerString) / sizeof(as2LowerString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(as2LowerString) / sizeof(as2LowerString[0])); idx++)
         {
-            STR_String2Lower(acOut, as2LowerString[szIdx].pcSrc, sizeof acOut);
-            if(strcmp(acOut, as2LowerString[szIdx].pcDest) == 0)
+            STR_String2Lower(output, as2LowerString[idx].src, sizeof output);
+            if(strcmp(output, as2LowerString[idx].dst) == 0)
             {
-                printf("(STR_String2Lower) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_String2Lower) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_String2Lower) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_String2Lower) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -224,41 +224,41 @@ int TstStr(void)
         else
         {
             printf("(STR_String2Upper) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_String2Upper(acOut, NULL, sizeof acOut) == NULL)
+        if(STR_String2Upper(output, NULL, sizeof output) == NULL)
         {
             printf("(STR_String2Upper) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_String2Upper) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_String2Upper(acOut, "Ade", 0) == NULL)
+        if(STR_String2Upper(output, "Ade", 0) == NULL)
         {
             printf("(STR_String2Upper) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_String2Upper) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(as2UpperString) / sizeof(as2UpperString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(as2UpperString) / sizeof(as2UpperString[0])); idx++)
         {
-            STR_String2Upper(acOut, as2UpperString[szIdx].pcSrc, sizeof acOut);
-            if(strcmp(acOut, as2UpperString[szIdx].pcDest) == 0)
+            STR_String2Upper(output, as2UpperString[idx].src, sizeof output);
+            if(strcmp(output, as2UpperString[idx].dst) == 0)
             {
-                printf("(STR_String2Upper) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_String2Upper) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_String2Upper) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_String2Upper) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -280,41 +280,41 @@ int TstStr(void)
         else
         {
             printf("(STR_LeftPadding) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_LeftPadding(acOut, NULL, sizeof acOut, ' ') == NULL)
+        if(STR_LeftPadding(output, NULL, sizeof output, ' ') == NULL)
         {
             printf("(STR_LeftPadding) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_LeftPadding) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_LeftPadding(acOut, "abc", 0, ' ') == NULL)
+        if(STR_LeftPadding(output, "abc", 0, ' ') == NULL)
         {
             printf("(STR_LeftPadding) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_LeftPadding) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(asLeftPaddingString) / sizeof(asLeftPaddingString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(asLeftPaddingString) / sizeof(asLeftPaddingString[0])); idx++)
         {
-            STR_LeftPadding(acOut, asLeftPaddingString[szIdx].pcSrc, sizeof acOut, asLeftPaddingString[szIdx].cChar);
-            if(strcmp(acOut, asLeftPaddingString[szIdx].pcDest) == 0)
+            STR_LeftPadding(output, asLeftPaddingString[idx].src, sizeof output, asLeftPaddingString[idx].character);
+            if(strcmp(output, asLeftPaddingString[idx].dst) == 0)
             {
-                printf("(STR_LeftPadding) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_LeftPadding) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_LeftPadding) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_LeftPadding) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -336,41 +336,41 @@ int TstStr(void)
         else
         {
             printf("(STR_RightPadding) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_RightPadding(acOut, NULL, sizeof acOut, ' ') == NULL)
+        if(STR_RightPadding(output, NULL, sizeof output, ' ') == NULL)
         {
             printf("(STR_RightPadding) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_RightPadding) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_RightPadding(acOut, "abc", 0, ' ') == NULL)
+        if(STR_RightPadding(output, "abc", 0, ' ') == NULL)
         {
             printf("(STR_RightPadding) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_RightPadding) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(asRightPaddingString) / sizeof(asRightPaddingString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(asRightPaddingString) / sizeof(asRightPaddingString[0])); idx++)
         {
-            STR_RightPadding(acOut, asRightPaddingString[szIdx].pcSrc, sizeof acOut, asRightPaddingString[szIdx].cChar);
-            if(strcmp(acOut, asRightPaddingString[szIdx].pcDest) == 0)
+            STR_RightPadding(output, asRightPaddingString[idx].src, sizeof output, asRightPaddingString[idx].character);
+            if(strcmp(output, asRightPaddingString[idx].dst) == 0)
             {
-                printf("(STR_RightPadding) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_RightPadding) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_RightPadding) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_RightPadding) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
@@ -393,44 +393,44 @@ int TstStr(void)
         else
         {
             printf("(STR_Center) Test pointeur de sortie NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_Center(acOut, NULL, sizeof acOut, ' ') == NULL)
+        if(STR_Center(output, NULL, sizeof output, ' ') == NULL)
         {
             printf("(STR_Center) Test pointeur d'entree NULL OK\n");
         }
         else
         {
             printf("(STR_Center) Test pointeur d'entree NULL KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(STR_Center(acOut, "abc", 0, ' ') == NULL)
+        if(STR_Center(output, "abc", 0, ' ') == NULL)
         {
             printf("(STR_Center) Test taille nulle OK\n");
         }
         else
         {
             printf("(STR_Center) Test taille nulle KO\n");
-            iResult = 1;
+            result = 1;
         }
 
         /* test de conversion */
-        for(szIdx = 0; szIdx < (sizeof(asCenterString) / sizeof(asCenterString[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(asCenterString) / sizeof(asCenterString[0])); idx++)
         {
-            STR_Center(acOut, asCenterString[szIdx].pcSrc, sizeof acOut, asCenterString[szIdx].cChar);
-            if(strcmp(acOut, asCenterString[szIdx].pcDest) == 0)
+            STR_Center(output, asCenterString[idx].src, sizeof output, asCenterString[idx].character);
+            if(strcmp(output, asCenterString[idx].dst) == 0)
             {
-                printf("(STR_Center) test %d OK\n", (int)(szIdx + 1));
+                printf("(STR_Center) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(STR_Center) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(STR_Center) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
-    return iResult;
+    return result;
 }

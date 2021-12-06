@@ -33,52 +33,52 @@ int TRACE_Version(void)
     return TRACE_VERS_MAJ * 10000 + TRACE_VERS_MIN * 100 + TRACE_VERS_BRCH;
 }
 
-void TRACE_ReportTrace(TRACE_Niveau_e eNiveau, const char *pcFormat, ... )
+void TRACE_ReportTrace(TRACE_Niveau_e level, const char* format, ... )
 {
     va_list ap;
-    pid_t Pid;
-    char acMsg[10000];
-    char acMsg2[10000];
-    char acLevel[15];
-    FILE* fDest;
-    char acDate[41];
-    char acDebugFilName[256];
-    const char acFileName[] = "Log";
-    const char acFileExt[] = ".txt";
+    pid_t pid;
+    char msg[10000];
+    char msg2[10000];
+    char levelName[15];
+    FILE* dst;
+    char date[41];
+    char debugFileName[256];
+    const char fileName[] = "Log";
+    const char fileExt[] = ".txt";
 
-    va_start(ap, pcFormat);
+    va_start(ap, format);
 
     /* Creation du nom du fichier */
-    DATE_GetTodayDate(acDate, sizeof acDate, "%Y%m%d");
-    PRINT_snprintf(acDebugFilName, sizeof acDebugFilName, "%s%s%s", acFileName, acDate, acFileExt);
+    DATE_GetTodayDate(date, sizeof date, "%Y%m%d");
+    PRINT_snprintf(debugFileName, sizeof debugFileName, "%s%s%s", fileName, date, fileExt);
 
     /* Construction de la chaine */
-    DATE_GetTodayDate(acDate, sizeof acDate, "%d/%m/%Y %H:%M:%S");
-    PRINT_vsnprintf(acMsg2, sizeof acMsg2, pcFormat, ap);
-    Pid = PROCESS_getpid();
+    DATE_GetTodayDate(date, sizeof date, "%d/%m/%Y %H:%M:%S");
+    PRINT_vsnprintf(msg2, sizeof msg2, format, ap);
+    pid = PROCESS_getpid();
 
-    acLevel[0] = '\0';
-    switch(eNiveau)
+    levelName[0] = '\0';
+    switch(level)
     {
 #define GEN(a, b)             \
       case TRACE_ ## a:       \
-         strncat(acLevel, b, sizeof acLevel - 1); \
+         strncat(levelName, b, sizeof levelName - 1); \
          break;
 #include "traces.gen"
 #undef GEN
 
     default :
-        strncat(acLevel, "UNKN!!! :", sizeof acLevel - 1);
+        strncat(levelName, "UNKN!!! :", sizeof levelName - 1);
         break;
     }
-    PRINT_snprintf(acMsg, sizeof acMsg, "%s : <%d> %s %s\n", acDate, (int)Pid, acLevel, acMsg2);
+    PRINT_snprintf(msg, sizeof msg, "%s : <%d> %s %s\n", date, (int)pid, levelName, msg2);
 
     /* Ajout de la trace dans le fichier */
-    fDest = fopen(acDebugFilName, "a");
-    if(fDest != NULL)
+    dst = fopen(debugFileName, "a");
+    if(dst != NULL)
     {
-        fwrite(acMsg, strlen(acMsg), 1, fDest);
-        fclose(fDest);
+        fwrite(msg, strlen(msg), 1, dst);
+        fclose(dst);
     }
     va_end(ap);
 }

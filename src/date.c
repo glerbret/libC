@@ -29,22 +29,22 @@ int DATE_Version(void)
     return DATE_VERS_MAJ * 10000 + DATE_VERS_MIN * 100 + DATE_VERS_BRCH;
 }
 
-DATE_Res_e DATE_GetTodayDate(char* pcDate, size_t szLgDate, const char* pcFormat)
+DATE_Res_e DATE_GetTodayDate(char* date, size_t dateSize, const char* format)
 {
-    time_t Date_bin;
-    struct tm* Date_struct;
+    time_t dateBin;
+    struct tm* dateStruct;
 
     setlocale(LC_ALL, "");
 
     /* Lecture de la date */
-    if(time(&Date_bin) == (time_t) -1)
+    if(time(&dateBin) == (time_t) -1)
     {
         return DATE_READ_ERROR;
     }
 
     /* Formatage de la date */
-    Date_struct = localtime(&Date_bin);
-    if (strftime(pcDate, szLgDate, pcFormat, Date_struct) == (size_t) 0)
+    dateStruct = localtime(&dateBin);
+    if (strftime(date, dateSize, format, dateStruct) == (size_t) 0)
     {
         return DATE_CONV_ERROR;
     }

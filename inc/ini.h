@@ -40,30 +40,30 @@ int INI_Version(void);
 /**
  * @brief Lecture d'un element dans un fichier .ini
  *
- * @param[in] pcSectionName Nom de la section
- * @param[in] pcKeyName Nom de la cle
- * @param[in] pcDefault Valeur par defaut
- * @param[out] pcReturnedString Valeur lue
- * @param[in] szSize Taille maximale de la valeur
- * @param[in] pcFileName Nom du fichier .ini
+ * @param[in] sectionName Nom de la section
+ * @param[in] keyName Nom de la cle
+ * @param[in] defaultValue Valeur par defaut
+ * @param[out] readValue Valeur lue
+ * @param[in] maxSize Taille maximale de la valeur
+ * @param[in] fileName Nom du fichier .ini
  *
  * @return Nombre de caracteres lus
  */
-size_t INI_ReadIni(const char* pcSectionName, const char* pcKeyName, const char* pcDefault, char* pcReturnedString, size_t szSize, const char* pcFileName);
+size_t INI_ReadIni(const char* sectionName, const char* keyName, const char* defaultValue, char* readValue, size_t maxSize, const char* fileName);
 
 /**
  * @brief Ecriture d'un element dans un fichier .ini
  *
- * @param[in] pcSectionName Nom de la section
- * @param[in] pcKeyName Nom de la cle
- * @param[in] pcWriteString Valeur a inscrire
- * @param[in] pcFileName Nom du fichier .ini
+ * @param[in] sectionName Nom de la section
+ * @param[in] keyName Nom de la cle
+ * @param[in] valueToWrite Valeur a inscrire
+ * @param[in] fileName Nom du fichier .ini
  *
  * @return
  *  - INI_OK si l'ecriture c'est bien deroulee
  *  - INI_KO sinon
 */
-INI_Res_e      INI_WriteIni(const char* pcSectionName, const char* pcKeyName, const char* pcWriteString, const char* pcFileName);
+INI_Res_e INI_WriteIni(const char* sectionName, const char* keyName, const char* valueToWrite, const char* fileName);
 
 #ifdef __cplusplus
 }

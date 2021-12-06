@@ -48,100 +48,100 @@ int QUEUE_Version(void);
 
 /**
  * @brief Creation d'une file
- * @param[out] eError Resultat de la creation :
+ * @param[out] error Resultat de la creation :
  *                      - QUEUE_NO_ERROR : la creation s'est correctement deroulee
  *                      - QUEUE_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
  *
  * @return File cree (NULL en cas d'erreur).
  */
-queue_s* QUEUE_Create(QUEUE_Error_e* eError);
+queue_s* QUEUE_Create(QUEUE_Error_e* error);
 
 /**
  * @brief Destruction d'une file
  *
- * @param[in] pQueue File
+ * @param[in] queue File
  */
-void QUEUE_Destroy(queue_s* pQueue);
+void QUEUE_Destroy(queue_s* queue);
 
 /**
  * @brief Verification de la vacuite de la file
  *
- * @param[in] pQueue File
+ * @param[in] queue File
  *
  * @return
  *  - TRUE si la file est vide
  *  - FALSE sinon
  */
-bool QUEUE_IsEmpty(const queue_s* pQueue);
+bool QUEUE_IsEmpty(const queue_s* queue);
 
 /**
  * @brief Calcul du nombre d'element de la file
  *
- * @param[in] pQueue File
+ * @param[in] queue File
  *
  * @return Nombre d'element de la file
  */
-size_t QUEUE_Size(const queue_s* pQueue);
+size_t QUEUE_Size(const queue_s* queue);
 
 /**
  * @brief Ajout d'un element a la file
  *
- * @param[in,out] pQueue File
- * @param[in] pData Element a ajouter
- * @param[in] szDataSize Taille de l'element
+ * @param[in,out] queue File
+ * @param[in] data Element a ajouter
+ * @param[in] dataSize Taille de l'element
  *
  * @return
  *  - QUEUE_NO_ERROR : l'ajout s'est correctement deroule
  *  - QUEUE_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire ou il n'existe pas de donnee a inserer
  */
-QUEUE_Error_e QUEUE_Enqueue(queue_s* pQueue, const void* pData, size_t szDataSize);
+QUEUE_Error_e QUEUE_Enqueue(queue_s* queue, const void* data, size_t dataSize);
 
 /**
  * @brief Lecture et suppression d'un element de la file
  *
- * @param[in,out] pQueue File
- * @param[out] eError Resultat de la lecture :
+ * @param[in,out] queue File
+ * @param[out] error Resultat de la lecture :
  *                      - QUEUE_NO_ERROR : la lecture s'est correctement deroulee
  *                      - QUEUE_EMPTY_QUEUE : la file est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* QUEUE_Dequeue(queue_s* pQueue, QUEUE_Error_e* eError);
+const void* QUEUE_Dequeue(queue_s* queue, QUEUE_Error_e* error);
 
 /**
  * @brief Lecture d'un element de la file
  *
- * @param[in] pQueue File
- * @param[out] eError Resultat de la lecture :
+ * @param[in] queue File
+ * @param[out] error Resultat de la lecture :
  *                      - QUEUE_NO_ERROR : la lecture s'est correctement deroulee
  *                      - QUEUE_EMPTY_QUEUE : la file est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* QUEUE_Peek(const queue_s* pQueue, QUEUE_Error_e* eError);
+const void* QUEUE_Peek(const queue_s* queue, QUEUE_Error_e* error);
 
 /**
  * @brief Suppression d'un element de la file
  *
- * @param[in,out] pQueue File
+ * @param[in,out] queue File
  *
  * @return
  *  - QUEUE_NO_ERROR : la suppression s'est correctement deroulee
  *  - QUEUE_EMPTY_QUEUE : la pile est vide
  */
-QUEUE_Error_e QUEUE_Remove(queue_s* pQueue);
+QUEUE_Error_e QUEUE_Remove(queue_s* queue);
 
 /**
  * @brief Duplication d'une file
  *
- * @param[in] pQueue File a dupliquer
- * @param[out] eError Statut de la duplication :
+ * @param[in] queue File a dupliquer
+ * @param[out] error Statut de la duplication :
  *                      - QUEUE_NO_ERROR : la copie s'est correctement deroulee
  *                      - QUEUE_ALLOC_QUEUE : le module n'a pas pu allouer assez de memoire
  *
  * @return Copie de la file
  */
-queue_s* QUEUE_Clone(const queue_s* pQueue, QUEUE_Error_e* eError);
+queue_s* QUEUE_Clone(const queue_s* queue, QUEUE_Error_e* error);
 
 #ifdef __cplusplus
 }

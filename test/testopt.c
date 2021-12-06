@@ -7,21 +7,21 @@
 
 typedef struct
 {
-    int         iNbOpt;
-    const char* pcLine[7];
-    const char* pcResult;
+    int         nbOpt;
+    const char* line[7];
+    const char* result;
 } lignecom_s;
 
 int TstOpt(void)
 {
-    int iResult = 0;
-    size_t szIdx;
+    int result = 0;
+    size_t idx;
 
     printf("\nTest de \"%s\"\n", OPT_Identifier());
 
     /* Test de la fonction OPT_GetOpt */
     {
-        lignecom_s asLine[] =
+        lignecom_s lines[] =
         {
             {
                 5,
@@ -39,49 +39,49 @@ int TstOpt(void)
                 "a bdonnee "
             }
         };
-        const char acOpt[] = "ab:c";
-        char acResult[25];
-        const char* pcData;
-        bool bExit;
-        int iFlag;
-        int iRes;
+        const char options[] = "ab:c";
+        char output[25];
+        const char* data;
+        bool exit;
+        int flag;
+        int res;
 
         /* Test de recuperation */
-        for(szIdx = 0; szIdx < (sizeof(asLine) / sizeof(asLine[0])); szIdx++)
+        for(idx = 0; idx < (sizeof(lines) / sizeof(lines[0])); idx++)
         {
-            bExit = false;
-            iFlag = OPT_FLG_RESET;
-            acResult[0] = '\0';
+            exit = false;
+            flag = OPT_FLG_RESET;
+            output[0] = '\0';
 
-            while(bExit == false)
+            while(exit == false)
             {
-                if((iRes = OPT_GetOpt(asLine[szIdx].iNbOpt, asLine[szIdx].pcLine, &pcData, acOpt, iFlag)) != OPT_END)
+                if((res = OPT_GetOpt(lines[idx].nbOpt, lines[idx].line, &data, options, flag)) != OPT_END)
                 {
-                    sprintf(acResult + strlen(acResult), "%c", (char)iRes);
-                    if(pcData != NULL)
+                    sprintf(output + strlen(output), "%c", (char)res);
+                    if(data != NULL)
                     {
-                        strcat(acResult, pcData);
+                        strcat(output, data);
                     }
-                    strcat(acResult, " ");
+                    strcat(output, " ");
                 }
                 else
                 {
-                    bExit = true;
+                    exit = true;
                 }
-                iFlag = 0;
+                flag = 0;
             }
 
-            if(strcmp(acResult, asLine[szIdx].pcResult) == 0)
+            if(strcmp(output, lines[idx].result) == 0)
             {
-                printf("(OPT_GetOpt) test %d OK\n", (int)(szIdx + 1));
+                printf("(OPT_GetOpt) test %d OK\n", (int)(idx + 1));
             }
             else
             {
-                printf("(OPT_GetOpt) test %d KO\n", (int)(szIdx + 1));
-                iResult = 1;
+                printf("(OPT_GetOpt) test %d KO\n", (int)(idx + 1));
+                result = 1;
             }
         }
     }
 
-    return iResult;
+    return result;
 }

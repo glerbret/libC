@@ -39,28 +39,28 @@ int BCD_Version(void);
 /**
  * @brief Conversion d'un nombre au format BCD vers sa representation textuelle
  *
- * @param[out] pcAscii Chaine de caracteres representant le nombre
- * @param[in] pcBCD Nombre au format BCD
- * @param[in] szNbDigit Taille du nombre (en digits)
+ * @param[out] ascii Chaine de caracteres representant le nombre
+ * @param[in] bcd Nombre au format BCD
+ * @param[in] nbDigit Taille du nombre (en digits)
  *
  * @return
  *  - BCD_OK en cas de succes
  *  - BCD_CONV_ERROR en cas d'erreur
  */
-BCD_Res_e BCD_ConvBCD2Ascii(char* pcAscii, const unsigned char* pcBCD, size_t szNbDigit);
+BCD_Res_e BCD_ConvBCD2Ascii(char* ascii, const unsigned char* bcd, size_t nbDigit);
 
 /**
  * @brief Conversion de la representation textuelle d'un nombre vers sa representation BCD
  *
- * @param[out] pcBCD Nombre au format BCD
- * @param[in] pcAscii Chaine de caracteres representant le nombre
- * @param[in] szNbDigit Taille du nombre (en digit)
+ * @param[out] bcd Nombre au format BCD
+ * @param[in] ascii Chaine de caracteres representant le nombre
+ * @param[in] nbDigit Taille du nombre (en digit)
  *
  * @return
  *  - BCD_OK en cas de succes
  *  - BCD_CONV_ERROR en cas d'erreur
  */
-BCD_Res_e BCD_ConvAscii2BCD(unsigned char* pcBCD, const char* pcAscii, size_t szNbDigit);
+BCD_Res_e BCD_ConvAscii2BCD(unsigned char* bcd, const char* ascii, size_t nbDigit);
 
 #ifdef __cplusplus
 }

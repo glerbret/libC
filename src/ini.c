@@ -34,18 +34,18 @@ int INI_Version(void)
     return INI_VERS_MAJ * 10000 + INI_VERS_MIN * 100 + INI_VERS_BRCH;
 }
 
-size_t INI_ReadIni(const char* pcSectionName, const char* pcKeyName, const char* pcDefault, char* pcReturnedString, size_t szSize, const char* pcFileName)
+size_t INI_ReadIni(const char* sectionName, const char* keyName, const char* defaultValue, char* readValue, size_t maxSize, const char* fileName)
 {
     /* Verification des conditions initiales */
     {
-        if(pcReturnedString == NULL  || szSize == 0)
+        if(readValue == NULL  || maxSize == 0)
         {
             return 0;
         }
 
-        if(pcSectionName == NULL || pcSectionName[0] == '\0' || pcKeyName == NULL || pcKeyName[0] == '\0')
+        if(sectionName == NULL || sectionName[0] == '\0' || keyName == NULL || keyName[0] == '\0')
         {
-            pcReturnedString[0] = '\0';
+            readValue[0] = '\0';
             return 0;
         }
     }
@@ -54,32 +54,32 @@ size_t INI_ReadIni(const char* pcSectionName, const char* pcKeyName, const char*
     {
 #if defined(__BORLANDC__) || (defined(_MSC_VER) && _MSC_VER < 1400)
         /* Si une fonction systeme permettant de lire les fichiers ini existe, on l'utilise */
-        return (size_t)GetPrivateProfileString(pcSectionName, pcKeyName, pcDefault, pcReturnedString, (DWORD)szSize, pcFileName);
+        return (size_t)GetPrivateProfileString(sectionName, keyName, defaultValue, readValue, (DWORD)maxSize, fileName);
 #else
         FILE* fp = NULL;
-        int iSectionFind = 0;
-        int iKeyFind = 0;
-        char acRead[BUFSIZ + 1] = "";
-        char acTmp1[BUFSIZ + 1];
-        char acSection[50 + 1] = "";
-        char acKey[50 + 1] = "";
-        char* pcSep;
+        int isSectionFound = 0;
+        int isKeyFound = 0;
+        char readData[BUFSIZ + 1] = "";
+        char tmp[BUFSIZ + 1];
+        char section[50 + 1] = "";
+        char key[50 + 1] = "";
+        char* sep;
 
         /* La fonction est case-insensitive */
-        STR_String2Lower(acSection, pcSectionName, sizeof acSection);
-        STR_String2Lower(acKey, pcKeyName, sizeof acKey);
+        STR_String2Lower(section, sectionName, sizeof section);
+        STR_String2Lower(key, keyName, sizeof key);
 
-        fp = fopen( pcFileName, "r");
+        fp = fopen(fileName, "r");
         if (fp == NULL)
         {
-            if (pcDefault != NULL)
+            if (defaultValue != NULL)
             {
-                strncpy(pcReturnedString, pcDefault, szSize - 1);
-                pcReturnedString[szSize - 1] = '\0';
+                strncpy(readValue, defaultValue, maxSize - 1);
+                readValue[maxSize - 1] = '\0';
             }
             else
             {
-                pcReturnedString[0] = '\0';
+                readValue[0] = '\0';
             }
         }
         else
@@ -87,20 +87,20 @@ size_t INI_ReadIni(const char* pcSectionName, const char* pcKeyName, const char*
             fseek(fp, 0L, SEEK_SET);
 
             /* recherche de la section */
-            while (fgets(acRead, sizeof acRead - 1, fp) != NULL && iKeyFind == 0)
+            while (fgets(readData, sizeof readData - 1, fp) != NULL && isKeyFound == 0)
             {
                 /* suppression du '\n' */
-                pcSep = strchr(acRead, '\n');
-                if(pcSep != NULL)
+                sep = strchr(readData, '\n');
+                if(sep != NULL)
                 {
-                    pcSep[0] = '\0';
+                    sep[0] = '\0';
                 }
 
                 /* La fonction est case-insensitive et les espaces ne sont pas significatifs */
-                STR_Strip(acRead, acRead, sizeof acRead);
-                STR_String2Lower(acRead, acRead, sizeof acRead);
+                STR_Strip(readData, readData, sizeof readData);
+                STR_String2Lower(readData, readData, sizeof readData);
 
-                switch(acRead[0])
+                switch(readData[0])
                 {
                 case '\n':     /* Ligne vide */
                 case ';':      /* Commentaire */
@@ -108,64 +108,64 @@ size_t INI_ReadIni(const char* pcSectionName, const char* pcKeyName, const char*
                     break;
 
                 case '[':
-                    if (strncmp(acSection, &acRead[1], strlen(acSection)) == 0 && acRead[strlen(acSection) + 1] == ']')
+                    if (strncmp(section, &readData[1], strlen(section)) == 0 && readData[strlen(section) + 1] == ']')
                     {
                         /* la section est trouve */
-                        iSectionFind = 1;
+                        isSectionFound = 1;
                     }
                     else
                     {
                         /* on se trouve dans une autre section */
-                        iSectionFind = 0;
+                        isSectionFound = 0;
                     }
                     break;
 
                 default:
-                    if(iSectionFind == 1)
+                    if(isSectionFound == 1)
                     {
                         /* separation de la chaine */
-                        strcpy(acTmp1, &acRead[strcspn(acRead, "=") + 1]);
-                        STR_Strip(acTmp1, acTmp1, sizeof acTmp1);
-                        acRead[strcspn(acRead, "=")] = '\0';
+                        strcpy(tmp, &readData[strcspn(readData, "=") + 1]);
+                        STR_Strip(tmp, tmp, sizeof tmp);
+                        readData[strcspn(readData, "=")] = '\0';
 
                         /* Les espaces ne sont pas significatifs */
-                        STR_Strip(acRead, acRead, sizeof acRead);
+                        STR_Strip(readData, readData, sizeof readData);
 
-                        if (memcmp(acRead, acKey, strlen(acKey)) == 0)
+                        if(memcmp(readData, key, strlen(key)) == 0)
                         {
-                            strncpy(pcReturnedString, acTmp1, szSize - 1);
-                            pcReturnedString[szSize - 1] = '\0';
-                            iKeyFind = 1;
+                            strncpy(readValue, tmp, maxSize - 1);
+                            readValue[maxSize - 1] = '\0';
+                            isKeyFound = 1;
                         }
                     }
                 }
             }
 
             /* la cle n'a pas ete trouve, on renvoie la valeur par defaut si elle existe */
-            if (iKeyFind == 0 && pcDefault != NULL)
+            if (isKeyFound == 0 && defaultValue != NULL)
             {
-                strncpy(pcReturnedString, pcDefault, szSize - 1);
-                pcReturnedString[szSize - 1] = '\0';
+                strncpy(readValue, defaultValue, maxSize - 1);
+                readValue[maxSize - 1] = '\0';
             }
-            else if (iKeyFind == 0 && pcDefault == NULL)
+            else if (isKeyFound == 0 && defaultValue == NULL)
             {
-                pcReturnedString[0] = '\0';
+                readValue[0] = '\0';
             }
 
             fclose(fp);
         }
-        return strlen(pcReturnedString);
+        return strlen(readValue);
 #endif
     }
 }
 
-INI_Res_e INI_WriteIni(const char* pcSectionName, const char* pcKeyName, const char* pcWriteString, const char* pcFileName)
+INI_Res_e INI_WriteIni(const char* sectionName, const char* keyName, const char* valueToWrite, const char* fileName)
 {
     /* Verification des conditions initiales */
-    if(pcSectionName == NULL || pcSectionName[0] == '\0'  ||
-       pcKeyName == NULL || pcKeyName[0] == '\0'          ||
-       pcWriteString == NULL || pcWriteString[0] == '\0'  ||
-       pcFileName == NULL || pcFileName[0] == '\0')
+    if(sectionName == NULL || sectionName[0] == '\0'  ||
+       keyName == NULL || keyName[0] == '\0'          ||
+       valueToWrite == NULL || valueToWrite[0] == '\0'  ||
+       fileName == NULL || fileName[0] == '\0')
     {
         return INI_KO;
     }
@@ -174,7 +174,7 @@ INI_Res_e INI_WriteIni(const char* pcSectionName, const char* pcKeyName, const c
     {
 #if defined(__BORLANDC__) || (defined(_MSC_VER) && _MSC_VER < 1400)
         /* Si une fonction systeme permettant d'ecrire les fichiers ini existe, on l'utilise */
-        if(WritePrivateProfileString(pcSectionName, pcKeyName, pcWriteString, pcFileName) == true)
+        if(WritePrivateProfileString(sectionName, keyName, valueToWrite, fileName) == true)
         {
             return INI_OK;
         }
@@ -185,161 +185,161 @@ INI_Res_e INI_WriteIni(const char* pcSectionName, const char* pcKeyName, const c
 #else
         const char  acProvFileName[] = "./INI_GL_Prov.ini";
 
-        FILE* fDest = NULL;
-        FILE* fSource = NULL;
-        char acSection[50 + 1] = "";
-        char acKey[50 + 1] = "";
-        char acRead[BUFSIZ + 1] = "";
-        char acTmp1[BUFSIZ + 1] = "";
-        char acTmp2[BUFSIZ + 1] = "";
-        int iSectionFind = 0;
-        bool bExit = false;
-        INI_Res_e eResult = INI_OK;
+        FILE* dst = NULL;
+        FILE* src = NULL;
+        char section[50 + 1] = "";
+        char key[50 + 1] = "";
+        char readData[BUFSIZ + 1] = "";
+        char tmp1[BUFSIZ + 1] = "";
+        char tmp2[BUFSIZ + 1] = "";
+        int isSectionFound = 0;
+        bool exit = false;
+        INI_Res_e result = INI_OK;
 
         /* La fonction est case-insensitive */
-        STR_String2Lower(acSection, pcSectionName, sizeof acSection);
-        STR_String2Lower(acKey, pcKeyName, sizeof acKey);
+        STR_String2Lower(section, sectionName, sizeof section);
+        STR_String2Lower(key, keyName, sizeof key);
 
-        fDest = fopen(acProvFileName, "w");
-        if(fDest ==  NULL)
+        dst = fopen(acProvFileName, "w");
+        if(dst ==  NULL)
         {
-            eResult = INI_KO;
+            result = INI_KO;
         }
 
-        fSource = fopen(pcFileName, "r");
-        if(fSource ==  NULL)
+        src = fopen(fileName, "r");
+        if(src ==  NULL)
         {
-            eResult = INI_KO;
+            result = INI_KO;
         }
 
-        if(eResult == INI_OK)
+        if(result == INI_OK)
         {
             /* recherche de la section et ecriture avant la section dans le fichier temporaire */
-            while(iSectionFind == 0 && fgets(acRead, sizeof acRead - 1, fSource) != NULL)
+            while(isSectionFound == 0 && fgets(readData, sizeof readData - 1, src) != NULL)
             {
                 /* La fonction est case-insensitive et les espaces ne sont pas significatifs */
-                STR_Strip(acTmp1, acRead, sizeof acTmp1);
-                STR_String2Lower(acTmp1, acTmp1, sizeof acTmp1);
+                STR_Strip(tmp1, readData, sizeof tmp1);
+                STR_String2Lower(tmp1, tmp1, sizeof tmp1);
 
-                if(acTmp1[0] == '[' && strncmp(acSection, &acTmp1[1], strlen(acSection)) == 0 && acTmp1[strlen(acSection) + 1] == ']')
+                if(tmp1[0] == '[' && strncmp(section, &tmp1[1], strlen(section)) == 0 && tmp1[strlen(section) + 1] == ']')
                 {
                     /* la section est trouve */
-                    iSectionFind = 1;
+                    isSectionFound = 1;
                 }
 
                 /* copie le buffer dans la destination */
-                fputs(acRead, fDest);
+                fputs(readData, dst);
             }
 
             /* si la section n'a pas ete trouve */
-            if(iSectionFind == 0)
+            if(isSectionFound == 0)
             {
                 /* la section n'a pas ete trouvee et on se trouve donc en fin de fichier,
                    on rajoute la nouvelle section ... */
-                strcpy(acTmp1, "\n[");
-                strcat(acTmp1, pcSectionName);
-                strcat(acTmp1, "]\n");
-                fputs(acTmp1, fDest);
+                strcpy(tmp1, "\n[");
+                strcat(tmp1, sectionName);
+                strcat(tmp1, "]\n");
+                fputs(tmp1, dst);
 
                 /* ... la cle et la valeur */
-                strcpy(acTmp1, pcKeyName);
-                strcat(acTmp1, "=");
-                strcat(acTmp1, pcWriteString);
-                strcat(acTmp1, "\n");
-                fputs(acTmp1, fDest);
+                strcpy(tmp1, keyName);
+                strcat(tmp1, "=");
+                strcat(tmp1, valueToWrite);
+                strcat(tmp1, "\n");
+                fputs(tmp1, dst);
             }
             else
             {
                 /* la section a ete trouve, on cherche la cle */
-                while (bExit == false)
+                while (exit == false)
                 {
-                    if (fgets(acRead, sizeof acRead - 1, fSource) == NULL)
+                    if (fgets(readData, sizeof readData - 1, src) == NULL)
                     {
                         /* La cle n'a pas ete trouvee, on rajoute la nouvelle cle et la valeur */
-                        strcpy(acTmp1, pcKeyName);
-                        strcat(acTmp1, "=");
-                        strcat(acTmp1, pcWriteString);
-                        strcat(acTmp1, "\n");
-                        fputs(acTmp1, fDest);
-                        bExit = true;
+                        strcpy(tmp1, keyName);
+                        strcat(tmp1, "=");
+                        strcat(tmp1, valueToWrite);
+                        strcat(tmp1, "\n");
+                        fputs(tmp1, dst);
+                        exit = true;
                     }
                     else
                     {
-                        if(acRead[0] == '\n')
+                        if(readData[0] == '\n')
                         {
                             /* Il s'agit d'un saut de ligne, on n'inscrit rien afin de ne pas avoir de saut de ligne parasite */
                             /* NOP */
                         }
-                        else if(acRead[0] == '[')
+                        else if(readData[0] == '[')
                         {
                             /* On rentrer dans une nouvelle section et la cle n'a pas ete trouvee dans, on rajoute la nouvelle cle et la valeur ... */
-                            strcpy(acTmp1, pcKeyName);
-                            strcat(acTmp1, "=");
-                            strcat(acTmp1, pcWriteString);
-                            strcat(acTmp1, "\n\n");
-                            fputs(acTmp1, fDest);
+                            strcpy(tmp1, keyName);
+                            strcat(tmp1, "=");
+                            strcat(tmp1, valueToWrite);
+                            strcat(tmp1, "\n\n");
+                            fputs(tmp1, dst);
 
                             /* ... et ce que l'on vient de lire */
-                            fputs(acRead, fDest);
-                            bExit = true;
+                            fputs(readData, dst);
+                            exit = true;
                         }
                         else
                         {
                             /* On rcupere la cle courante */
-                            strcpy(acTmp1, acRead);
-                            acTmp1[strcspn(acTmp1, "=")] = '\0';
+                            strcpy(tmp1, readData);
+                            tmp1[strcspn(tmp1, "=")] = '\0';
 
                             /* La fonction est case-insensitive et les espaces ne sont pas significatifs */
-                            STR_Strip(acTmp2, acTmp1, sizeof acTmp2);
-                            STR_String2Lower(acTmp2, acTmp2, sizeof acTmp2);
+                            STR_Strip(tmp2, tmp1, sizeof tmp2);
+                            STR_String2Lower(tmp2, tmp2, sizeof tmp2);
 
-                            if (memcmp(acTmp2, acKey, strlen(acKey)) == 0)
+                            if(memcmp(tmp2, key, strlen(key)) == 0)
                             {
                                 /* La cle est trouve, on ecrit la nouvelle valeur */
-                                strcpy(acTmp2, acTmp1);
-                                strcat(acTmp2, "=");
-                                strcat(acTmp2, pcWriteString);
-                                strcat(acTmp2, "\n");
-                                fputs(acTmp2, fDest);
-                                bExit = true;
+                                strcpy(tmp2, tmp1);
+                                strcat(tmp2, "=");
+                                strcat(tmp2, valueToWrite);
+                                strcat(tmp2, "\n");
+                                fputs(tmp2, dst);
+                                exit = true;
                             }
                             else
                             {
                                 /* Ce n'est pas la bonne cle, on ecrit ce qui vient d'etre lu */
-                                fputs(acRead, fDest);
+                                fputs(readData, dst);
                             }
                         }
                     }
                 }
 
                 /* on ecrit la fin du fichier */
-                while(fgets(acRead, sizeof(acRead) - 1, fSource) != NULL)
+                while(fgets(readData, sizeof(readData) - 1, src) != NULL)
                 {
-                    fputs(acRead, fDest);
+                    fputs(readData, dst);
                 }
             }
         }
 
-        if(fDest != NULL)
+        if(dst != NULL)
         {
-            fclose(fDest), fDest = NULL;
+            fclose(dst), dst = NULL;
         }
-        if(fSource != NULL)
+        if(src != NULL)
         {
-            fclose(fSource), fSource = NULL;
+            fclose(src), src = NULL;
         }
 
         /* On recopie le fichier temporaire dans le .ini */
-        if(eResult == INI_OK)
+        if(result == INI_OK)
         {
-            remove(pcFileName);
-            if(rename(acProvFileName, pcFileName) != 0)
+            remove(fileName);
+            if(rename(acProvFileName, fileName) != 0)
             {
-                eResult = INI_KO;
+                result = INI_KO;
             }
         }
 
-        return eResult;
+        return result;
 #endif
     }
 }

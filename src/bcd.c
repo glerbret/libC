@@ -26,59 +26,59 @@ int BCD_Version(void)
     return BCD_VERS_MAJ * 10000 + BCD_VERS_MIN * 100 + BCD_VERS_BRCH;
 }
 
-BCD_Res_e BCD_ConvBCD2Ascii(char* pcAscii, const unsigned char* pcBCD, size_t szNbDigit)
+BCD_Res_e BCD_ConvBCD2Ascii(char* ascii, const unsigned char* bcd, size_t nbDigit)
 {
-    size_t szIndexASCII = 0;
-    size_t szIndexBCD = 0;
+    size_t indexAscii = 0;
+    size_t indexBcd = 0;
 
     /* Verification des conditions initiales */
-    if(pcAscii == NULL || pcBCD == NULL || szNbDigit == 0)
+    if(ascii == NULL || bcd == NULL || nbDigit == 0)
     {
         return BCD_CONV_ERROR;
     }
 
     /* Si la taille du nombre est impaire, le premier caractere ne conient q'un seul
        digit (dans le quartet de poid faible) */
-    if((szNbDigit % 2) != 0)
+    if((nbDigit % 2) != 0)
     {
-        pcAscii[0] = (char)((pcBCD[0] & 0x0F) + '0');
-        szNbDigit--;
-        szIndexASCII++;
-        szIndexBCD++;
+        ascii[0] = (char)((bcd[0] & 0x0F) + '0');
+        nbDigit--;
+        indexAscii++;
+        indexBcd++;
     }
 
-    for(; szIndexASCII < szNbDigit; szIndexASCII += 2, szIndexBCD++)
+    for(; indexAscii < nbDigit; indexAscii += 2, indexBcd++)
     {
-        pcAscii[szIndexASCII]      = (char)(((pcBCD[szIndexBCD] >> 4) & 0x0F) + '0');
-        pcAscii[szIndexASCII + 1]  = (char)((pcBCD[szIndexBCD] & 0x0F) + '0');
+        ascii[indexAscii]      = (char)(((bcd[indexBcd] >> 4) & 0x0F) + '0');
+        ascii[indexAscii + 1]  = (char)((bcd[indexBcd] & 0x0F) + '0');
     }
 
     return BCD_OK;
 }
 
-BCD_Res_e BCD_ConvAscii2BCD(unsigned char* pcBCD, const char* pcAscii, size_t szNbDigit)
+BCD_Res_e BCD_ConvAscii2BCD(unsigned char* bcd, const char* ascii, size_t nbDigit)
 {
-    size_t szIndex;
+    size_t index;
 
     /* Verification des conditions initiales */
-    if(pcAscii == NULL || pcBCD == NULL || szNbDigit == 0)
+    if(ascii == NULL || bcd == NULL || nbDigit == 0)
     {
         return BCD_CONV_ERROR;
     }
 
-    if((szNbDigit % 2) != 0)
+    if((nbDigit % 2) != 0)
     {
-        pcBCD[0] = (char)(pcAscii[0] - '0');
-        for(szIndex = 1; szIndex < (szNbDigit + 1) / 2; szIndex++)
+        bcd[0] = (char)(ascii[0] - '0');
+        for(index = 1; index < (nbDigit + 1) / 2; index++)
         {
-            pcBCD[szIndex] = (char)(((pcAscii[szIndex * 2 - 1] - '0') << 4) + (pcAscii[szIndex * 2] - '0'));
+            bcd[index] = (char)(((ascii[index * 2 - 1] - '0') << 4) + (ascii[index * 2] - '0'));
         }
     }
     else
     {
-        for(szIndex = 0; szIndex < (szNbDigit + 1) / 2; szIndex++)
+        for(index = 0; index < (nbDigit + 1) / 2; index++)
         {
-            pcBCD[szIndex] = (char)(((pcAscii[szIndex * 2] - '0') << 4) + (pcAscii[szIndex * 2 + 1] - '0'));
+            bcd[index] = (char)(((ascii[index * 2] - '0') << 4) + (ascii[index * 2 + 1] - '0'));
         }
     }
 

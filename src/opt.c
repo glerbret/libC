@@ -29,53 +29,53 @@ int OPT_Version(void)
     return OPT_VERS_MAJ * 10000 + OPT_VERS_MIN * 100 + OPT_VERS_BRCH;
 }
 
-int OPT_GetOpt(int iNbArg, const char *pacArg[], const char **pcData, const char* pcOpt, int iFlag)
+int OPT_GetOpt(int argc, const char *argv[], const char **data, const char* opt, int flags)
 {
-    static int iIdx = 0;
+    static int idx = 0;
 
     char* pcOptFind;
-    bool bExit = false;
-    int iRes = OPT_END;
+    bool exit = false;
+    int res = OPT_END;
 
     /* Initialisation des variables */
-    if(pcData != NULL)
+    if(data != NULL)
     {
-        *pcData = NULL;
+        *data = NULL;
     }
 
-    if((iFlag & OPT_FLG_RESET) != 0)
+    if((flags & OPT_FLG_RESET) != 0)
     {
-        iIdx = 0;
+        idx = 0;
     }
 
-    while(bExit == false && iIdx < iNbArg)
+    while(exit == false && idx < argc)
     {
         /* Recheche de la prochaine option */
-        for(; pacArg[iIdx][0] != '-' && iIdx < iNbArg; iIdx++)
+        for(; argv[idx][0] != '-' && idx < argc; idx++)
         {
             /* NOP */
         }
 
-        if((pcOptFind = strchr(pcOpt, pacArg[iIdx][1])) != NULL)
+        if((pcOptFind = strchr(opt, argv[idx][1])) != NULL)
         {
             /* L'option est presente dans la liste des options a traiter */
-            bExit = true;
-            iRes = (int)pacArg[iIdx][1];
+            exit = true;
+            res = (int)argv[idx][1];
 
             /* Recuperation des donnees liees a l'option */
-            if(pcOptFind[1] == ':' && pcData != NULL)
+            if(pcOptFind[1] == ':' && data != NULL)
             {
-                if(pacArg[iIdx][2] != '\0')
+                if(argv[idx][2] != '\0')
                 {
-                    *pcData = &pacArg[iIdx][2];
+                    *data = &argv[idx][2];
                 }
-                else if(pacArg[iIdx + 1][0] != '-')
+                else if(argv[idx + 1][0] != '-')
                 {
-                    *pcData = pacArg[++iIdx];
+                    *data = argv[++idx];
                 }
             }
         }
-        iIdx++;
+        idx++;
     }
-    return iRes;
+    return res;
 }

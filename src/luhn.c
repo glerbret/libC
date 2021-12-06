@@ -19,28 +19,28 @@
 #define LUHN_VERS_BRCH  0
 #define LUHN_ID		    LUHN_NAME " - Version " xstr(LUHN_VERS_MAJ) "." xstr(LUHN_VERS_MIN) "." xstr(LUHN_VERS_BRCH)
 
-/// @todo revoir le passage de iDouble dans LUHN_CalculateLuhnSum. Plutôt une info cle presente/non presente
+/// @todo revoir le passage de toDouble dans LUHN_CalculateLuhnSum. Plutôt une info cle presente/non presente
 /// @todo Preciser contrainte : ce sont des chaînes de caracteres
 /// @todo LUHN_CalculalteLuhnKey ==> LUHN_CalculateLuhnKey
 /// @todo Dans LUHN_CalculalteLuhnKey pourquoi utiliser un char et non un int ?
 
-static int LUHN_CalculateLuhnSum(const char* pcNumber, int iDouble)
+static int LUHN_CalculateLuhnSum(const char* number, int toDouble)
 {
-    int iIdx;
-    int iValue;
-    int iSum  = 0;
+    int idx;
+    int value;
+    int sum  = 0;
 
-    for(iIdx = (int)strlen(pcNumber) - 1; iIdx >= 0; iIdx--)
+    for(idx = (int)strlen(number) - 1; idx >= 0; idx--)
     {
-        iValue = (pcNumber[iIdx] - '0') * iDouble;
-        if(iValue >= 10)
+        value = (number[idx] - '0') * toDouble;
+        if(value >= 10)
         {
-            iValue = (iValue % 10) + 1;
+            value = (value % 10) + 1;
         }
-        iSum += iValue;
-        iDouble = (iDouble == 2 ? 1 : 2);
+        sum += value;
+        toDouble = (toDouble == 2 ? 1 : 2);
     }
-    return iSum;
+    return sum;
 }
 
 const char* LUHN_Identifier(void)
@@ -53,21 +53,21 @@ int LUHN_Version(void)
     return LUHN_VERS_MAJ * 10000 + LUHN_VERS_MIN * 100 + LUHN_VERS_BRCH;
 }
 
-char LUHN_CalculalteLuhnKey(const char* pcNumber)
+char LUHN_CalculalteLuhnKey(const char* number)
 {
-    char cLuhn;
+    char luhnKey;
 
-    cLuhn = (char)(10 - (LUHN_CalculateLuhnSum(pcNumber, 2) % 10));
-    if(cLuhn == 10)
+    luhnKey = (char)(10 - (LUHN_CalculateLuhnSum(number, 2) % 10));
+    if(luhnKey == 10)
     {
-        cLuhn = 0;
+        luhnKey = 0;
     }
-    return (char)(cLuhn + '0');
+    return (char)(luhnKey + '0');
 }
 
-LUHN_Res_e LUHN_CheckLuhnKey(const char* pcNumber)
+LUHN_Res_e LUHN_CheckLuhnKey(const char* number)
 {
-    if((LUHN_CalculateLuhnSum(pcNumber, 1) % 10) == 0)
+    if((LUHN_CalculateLuhnSum(number, 1) % 10) == 0)
     {
         return LUHN_OK;
     }

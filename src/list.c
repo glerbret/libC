@@ -24,35 +24,35 @@
 
 typedef struct list_cell
 {
-    struct list_cell*   pNext;
-    struct list_cell*   pPrev;
-    void*               pData;
-    size_t              szDataSize;
+    struct list_cell*   next;
+    struct list_cell*   prev;
+    void*               data;
+    size_t              dataSize;
 } list_cell_s;
 
 struct list
 {
-    list_cell_s*    pHead;
-    list_cell_s*    pTail;
-    list_cell_s*    pCurrent;
-    size_t          szNbCells;
-    int (*mCompar)(const void *, const void *);
+    list_cell_s*    head;
+    list_cell_s*    tail;
+    list_cell_s*    current;
+    size_t          nbCells;
+    int (*compar)(const void *, const void *);
 };
 
-static list_cell_s* LIST_AllocCell(const void* pData, size_t szDataSize)
+static list_cell_s* LIST_AllocCell(const void* data, size_t dataSize)
 {
-    list_cell_s* pCell = NULL;
+    list_cell_s* cell = NULL;
 
-    if(pData == NULL || szDataSize == 0)
+    if(data == NULL || dataSize == 0)
     {
         /* Il n'y a pas d'element a ajouter, on arrete ici et on retourne NULL */
-        pCell = NULL;
+        cell = NULL;
     }
     else
     {
-        pCell = malloc(sizeof * pCell);
+        cell = malloc(sizeof * cell);
 
-        if(pCell == NULL)
+        if(cell == NULL)
         {
             /* Echec de l'allocation, on retourne NULL */
             /* NOP */
@@ -60,80 +60,80 @@ static list_cell_s* LIST_AllocCell(const void* pData, size_t szDataSize)
         else
         {
             /* Intialisation de la cellule */
-            pCell->pNext = NULL;
-            pCell->pPrev = NULL;
+            cell->next = NULL;
+            cell->prev = NULL;
 
-            pCell->pData = malloc(szDataSize);
-            if(pCell->pData == NULL)
+            cell->data = malloc(dataSize);
+            if(cell->data == NULL)
             {
                 /* Echec de l'allocation, on detruit la cellule et on retourne NULL */
-                free(pCell), pCell = NULL;
+                free(cell), cell = NULL;
             }
             else
             {
-                memcpy(pCell->pData, pData, szDataSize);
-                pCell->szDataSize = szDataSize;
+                memcpy(cell->data, data, dataSize);
+                cell->dataSize = dataSize;
             }
         }
     }
 
-    return pCell;
+    return cell;
 }
 
-static list_cell_s* LIST_DetachCell(list_s* pList, list_cell_s* pCellToDelete)
+static list_cell_s* LIST_DetachCell(list_s* list, list_cell_s* cellToDelete)
 {
-    list_cell_s* pCell = NULL;
+    list_cell_s* cell = NULL;
 
-    if(pCellToDelete == NULL)
+    if(cellToDelete == NULL)
     {
         /* Il n'y a pas de cellule a retirer, on arrete ici et on retourne NULL */
-        pCell = NULL;
+        cell = NULL;
     }
     else
     {
         /* On detache la cellule */
-        pCell = pCellToDelete;
+        cell = cellToDelete;
 
-        if(pCell->pPrev == NULL)
+        if(cell->prev == NULL)
         {
-            pList->pHead = pCell->pNext;
+            list->head = cell->next;
         }
         else
         {
-            pCell->pPrev->pNext = pCell->pNext;
+            cell->prev->next = cell->next;
         }
 
-        if(pCell->pNext == NULL)
+        if(cell->next == NULL)
         {
-            pList->pTail = pCell->pPrev;
+            list->tail = cell->prev;
         }
         else
         {
-            pCell->pNext->pPrev = pCell->pPrev;
+            cell->next->prev = cell->prev;
         }
 
-        pList->szNbCells--;
+        list->nbCells--;
 
-        if(pList->szNbCells == 0)
+        if(list->nbCells == 0)
         {
             /* La liste est maintenant vide */
-            pList->pCurrent = NULL;
+            list->current = NULL;
         }
-        else if(pCell == pList->pCurrent)
+        else if(cell == list->current)
         {
             /* On vient de supprimmer la cellule courante, la cellule suivante (ou precedente si c'etait la derniere)
                devient la nouvelle cellule courante */
-            if(pCell->pNext != NULL)
+            if(cell->next != NULL)
             {
-                pList->pCurrent = pCell->pNext;
+                list->current = cell->next;
             }
             else
             {
-                pList->pCurrent = pCell->pPrev;
+                list->current = cell->prev;
             }
         }
     }
-    return pCell;
+    return cell;
 }
 
 const char* LIST_Identifier(void)
@@ -146,1013 +146,975 @@ int LIST_Version(void)
     return LIST_VERS_MAJ * 10000 + LIST_VERS_MIN * 100 + LIST_VERS_BRCH;
 }
 
-list_s* LIST_Create(int (*compar)(const void *, const void *), LIST_Error_e* eError)
+list_s* LIST_Create(int (*compar)(const void *, const void *), LIST_Error_e* error)
 {
-    list_s* pList = malloc(sizeof * pList);
+    list_s* list = malloc(sizeof * list);
 
-    if(pList == NULL)
+    if(list == NULL)
     {
         /* La liste n'a pas pu etre creer */
-        *eError = LIST_MEMORY_ERROR;
+        *error = LIST_MEMORY_ERROR;
     }
     else
     {
         /* Initialisation de la liste */
-        pList->pHead = NULL;
-        pList->pTail = NULL;
-        pList->pCurrent = NULL;
-        pList->szNbCells = 0;
-        pList->mCompar = compar;
-        *eError = LIST_NO_ERROR;
+        list->head = NULL;
+        list->tail = NULL;
+        list->current = NULL;
+        list->nbCells = 0;
+        list->compar = compar;
+        *error = LIST_NO_ERROR;
     }
-    return pList;
+    return list;
 }
 
-void LIST_Destroy(list_s* pList)
+void LIST_Destroy(list_s* list)
 {
     /* On se positionne sur le premier element ... */
-    if(LIST_SeekFirst(pList) == LIST_NO_ERROR)
+    if(LIST_SeekFirst(list) == LIST_NO_ERROR)
     {
         /* ... et on retire iterative toutes les cellules de la liste */
-        while(LIST_RemoveFirst(pList) != LIST_EMPTY_LIST)
+        while(LIST_RemoveFirst(list) != LIST_EMPTY_LIST)
         {
             /* NOP */
         }
     }
 
     /* Puis on detruit la liste*/
-    free(pList), pList = NULL;
+    free(list), list = NULL;
 }
 
-void LIST_SetCmp(list_s* pList, int (*compar)(const void *, const void *))
+void LIST_SetCmp(list_s* list, int (*compar)(const void *, const void *))
 {
-    pList->mCompar = compar;
+    list->compar = compar;
 }
 
-bool LIST_IsEmpty(const list_s* pList)
+bool LIST_IsEmpty(const list_s* list)
 {
-    return pList->pHead == NULL ? true : false;
+    return list->head == NULL;
 }
 
-size_t LIST_Size(const list_s* pList)
+size_t LIST_Size(const list_s* list)
 {
-    return pList->szNbCells;
+    return list->nbCells;
 }
 
-bool LIST_IsHead(const list_s* pList)
+bool LIST_IsHead(const list_s* list)
 {
-    bool bIsHead = false;
-
-    if(LIST_IsEmpty(pList) == true)
-    {
-        bIsHead = false;
-    }
-    else if(pList->pCurrent == pList->pHead)
-    {
-        bIsHead = true;
-    }
-    else
-    {
-        bIsHead = false;
-    }
-    return bIsHead;
+    return !LIST_IsEmpty(list) && list->current == list->head;
 }
 
-bool LIST_IsTail(const list_s* pList)
+bool LIST_IsTail(const list_s* list)
 {
-    bool bIsTail = false;
-
-    if(LIST_IsEmpty(pList) == true)
-    {
-        bIsTail = false;
-    }
-    else if(pList->pCurrent == pList->pTail)
-    {
-        bIsTail = true;
-    }
-    else
-    {
-        bIsTail = false;
-    }
-    return bIsTail;
+    return !LIST_IsEmpty(list) && list->current == list->tail;
 }
 
-LIST_Error_e LIST_InsertFirst(list_s* pList, const void* pData, size_t szDataSize)
+LIST_Error_e LIST_InsertFirst(list_s* list, const void* data, size_t dataSize)
 {
-    list_cell_s* pCell = LIST_AllocCell(pData, szDataSize);
-    LIST_Error_e eError = LIST_NO_ERROR;
+    list_cell_s* cell = LIST_AllocCell(data, dataSize);
+    LIST_Error_e error = LIST_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = LIST_MEMORY_ERROR;
+        error = LIST_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        pCell->pNext = pList->pHead;
-        pCell->pPrev = NULL;
-        if(pList->pHead != NULL)
+        cell->next = list->head;
+        cell->prev = NULL;
+        if(list->head != NULL)
         {
-            pList->pHead->pPrev = pCell;
+            list->head->prev = cell;
         }
 
         /* Mise a jour de la liste */
-        pList->pHead = pCell;
-        if(pList->szNbCells == 0)
+        list->head = cell;
+        if(list->nbCells == 0)
         {
-            pList->pTail = pCell;
+            list->tail = cell;
         }
-        pList->pCurrent = pCell;
-        pList->szNbCells++;
+        list->current = cell;
+        list->nbCells++;
 
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_InsertLast(list_s* pList, const void* pData, size_t szDataSize)
+LIST_Error_e LIST_InsertLast(list_s* list, const void* data, size_t dataSize)
 {
-    list_cell_s* pCell = LIST_AllocCell(pData, szDataSize);
-    LIST_Error_e eError = LIST_NO_ERROR;
+    list_cell_s* cell = LIST_AllocCell(data, dataSize);
+    LIST_Error_e error = LIST_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = LIST_MEMORY_ERROR;
+        error = LIST_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        pCell->pNext = NULL;
-        pCell->pPrev = pList->pTail;
-        if(pList->pTail != NULL)
+        cell->next = NULL;
+        cell->prev = list->tail;
+        if(list->tail != NULL)
         {
-            pList->pTail->pNext = pCell;
+            list->tail->next = cell;
         }
 
         /* Mise a jour de la liste */
-        pList->pTail = pCell;
-        if(pList->szNbCells == 0)
+        list->tail = cell;
+        if(list->nbCells == 0)
         {
-            pList->pHead = pCell;
+            list->head = cell;
         }
-        pList->pCurrent = pCell;
-        pList->szNbCells++;
+        list->current = cell;
+        list->nbCells++;
 
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_InsertNext(list_s* pList, const void* pData, size_t szDataSize)
+LIST_Error_e LIST_InsertNext(list_s* list, const void* data, size_t dataSize)
 {
-    list_cell_s* pCell = LIST_AllocCell(pData, szDataSize);
-    LIST_Error_e eError = LIST_NO_ERROR;
+    list_cell_s* cell = LIST_AllocCell(data, dataSize);
+    LIST_Error_e error = LIST_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = LIST_MEMORY_ERROR;
+        error = LIST_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        if(pList->pCurrent != NULL)
+        if(list->current != NULL)
         {
-            pCell->pNext = pList->pCurrent->pNext;
+            cell->next = list->current->next;
         }
-        pCell->pPrev = pList->pCurrent;
-        if(pList->pCurrent != NULL)
+        cell->prev = list->current;
+        if(list->current != NULL)
         {
-            pList->pCurrent->pNext = pCell;
+            list->current->next = cell;
         }
-        if(pCell->pNext != NULL)
+        if(cell->next != NULL)
         {
-            pCell->pNext->pPrev = pCell;
+            cell->next->prev = cell;
         }
 
         /* Mise a jour de la liste */
-        if(pList->szNbCells == 0)
+        if(list->nbCells == 0)
         {
-            pList->pHead = pCell;
-            pList->pTail = pCell;
+            list->head = cell;
+            list->tail = cell;
         }
-        if(pCell->pNext == NULL)
+        if(cell->next == NULL)
         {
-            pList->pTail = pCell;
+            list->tail = cell;
         }
-        pList->pCurrent = pCell;
-        pList->szNbCells++;
+        list->current = cell;
+        list->nbCells++;
 
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_InsertPrev(list_s* pList, const void* pData, size_t szDataSize)
+LIST_Error_e LIST_InsertPrev(list_s* list, const void* data, size_t dataSize)
 {
-    list_cell_s* pCell = LIST_AllocCell(pData, szDataSize);
-    LIST_Error_e eError = LIST_NO_ERROR;
+    list_cell_s* cell = LIST_AllocCell(data, dataSize);
+    LIST_Error_e error = LIST_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = LIST_MEMORY_ERROR;
+        error = LIST_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        pCell->pNext = pList->pCurrent;
-        if(pList->pCurrent != NULL)
+        cell->next = list->current;
+        if(list->current != NULL)
         {
-            pCell->pPrev = pList->pCurrent->pPrev;
+            cell->prev = list->current->prev;
         }
-        if(pList->pCurrent != NULL)
+        if(list->current != NULL)
         {
-            pList->pCurrent->pPrev = pCell;
+            list->current->prev = cell;
         }
-        if(pCell->pPrev != NULL)
+        if(cell->prev != NULL)
         {
-            pCell->pPrev->pNext = pCell;
+            cell->prev->next = cell;
         }
 
         /* Mise a jour de la liste */
-        if(pList->szNbCells == 0)
+        if(list->nbCells == 0)
         {
-            pList->pHead = pCell;
-            pList->pTail = pCell;
+            list->head = cell;
+            list->tail = cell;
         }
-        if(pCell->pPrev == NULL)
+        if(cell->prev == NULL)
         {
-            pList->pHead = pCell;
+            list->head = cell;
         }
-        pList->pCurrent = pCell;
-        pList->szNbCells++;
+        list->current = cell;
+        list->nbCells++;
 
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_SeekFirst(list_s* pList)
+LIST_Error_e LIST_SeekFirst(list_s* list)
 {
-    LIST_Error_e eError;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
     else
     {
-        pList->pCurrent = pList->pHead;
-        eError = LIST_NO_ERROR;
+        list->current = list->head;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_SeekLast(list_s* pList)
+LIST_Error_e LIST_SeekLast(list_s* list)
 {
-    LIST_Error_e eError;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
     else
     {
-        pList->pCurrent = pList->pTail;
-        eError = LIST_NO_ERROR;
+        list->current = list->tail;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_SeekNext(list_s* pList)
+LIST_Error_e LIST_SeekNext(list_s* list)
 {
-    LIST_Error_e eError;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(pList->pCurrent->pNext == NULL)
+    else if(list->current->next == NULL)
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pList->pCurrent = pList->pCurrent->pNext;
-        eError = LIST_NO_ERROR;
+        list->current = list->current->next;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_SeekPrev(list_s* pList)
+LIST_Error_e LIST_SeekPrev(list_s* list)
 {
-    LIST_Error_e eError;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(pList->pCurrent->pPrev == NULL)
+    else if(list->current->prev == NULL)
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pList->pCurrent = pList->pCurrent->pPrev;
-        eError = LIST_NO_ERROR;
+        list->current = list->current->prev;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-const void* LIST_ReadFirst(const list_s* pList, LIST_Error_e* eError)
+const void* LIST_ReadFirst(const list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pData = pList->pHead->pData;
-        *eError = LIST_NO_ERROR;
+        data = list->head->data;
+        *error = LIST_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_ReadLast(const list_s* pList, LIST_Error_e* eError)
+const void* LIST_ReadLast(const list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pData = pList->pTail->pData;
-        *eError = LIST_NO_ERROR;
+        data = list->tail->data;
+        *error = LIST_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_ReadCurrent(const list_s* pList, LIST_Error_e* eError)
+const void* LIST_ReadCurrent(const list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pData = pList->pCurrent->pData;
-        *eError = LIST_NO_ERROR;
+        data = list->current->data;
+        *error = LIST_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_ReadNext(const list_s* pList, LIST_Error_e* eError)
+const void* LIST_ReadNext(const list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
-    else if(pList->pCurrent->pNext == NULL)
+    else if(list->current->next == NULL)
     {
-        *eError = LIST_CELL_NOT_FOUND;
+        *error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pData = pList->pCurrent->pNext->pData;
-        *eError = LIST_NO_ERROR;
+        data = list->current->next->data;
+        *error = LIST_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_ReadPrev(const list_s* pList, LIST_Error_e* eError)
+const void* LIST_ReadPrev(const list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
-    else if(pList->pCurrent->pPrev == NULL)
+    else if(list->current->prev == NULL)
     {
-        *eError = LIST_CELL_NOT_FOUND;
+        *error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pData = pList->pCurrent->pPrev->pData;
-        *eError = LIST_NO_ERROR;
+        data = list->current->prev->data;
+        *error = LIST_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_GetFirst(list_s* pList, LIST_Error_e* eError)
+const void* LIST_GetFirst(list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
-    list_cell_s* pTmpCell = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pHead);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->head);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            *eError = LIST_EMPTY_LIST;
+            *error = LIST_EMPTY_LIST;
         }
         else
         {
-            pData = pTmpCell->pData;
-            free(pTmpCell);
+            data = tmpCell->data;
+            free(tmpCell);
 
-            *eError = LIST_NO_ERROR;
+            *error = LIST_NO_ERROR;
         }
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_GetLast(list_s* pList, LIST_Error_e* eError)
+const void* LIST_GetLast(list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
-    list_cell_s* pTmpCell;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pTail);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->tail);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            *eError = LIST_EMPTY_LIST;
+            *error = LIST_EMPTY_LIST;
         }
         else
         {
-            pData = pTmpCell->pData;
-            free(pTmpCell);
+            data = tmpCell->data;
+            free(tmpCell);
 
-            *eError = LIST_NO_ERROR;
+            *error = LIST_NO_ERROR;
         }
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_GetCurrent(list_s* pList, LIST_Error_e* eError)
+const void* LIST_GetCurrent(list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
-    list_cell_s* pTmpCell = NULL;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            *eError = LIST_EMPTY_LIST;
+            *error = LIST_EMPTY_LIST;
         }
         else
         {
-            pData = pTmpCell->pData;
-            free(pTmpCell);
+            data = tmpCell->data;
+            free(tmpCell);
 
-            *eError = LIST_NO_ERROR;
+            *error = LIST_NO_ERROR;
         }
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_GetNext(list_s* pList, LIST_Error_e* eError)
+const void* LIST_GetNext(list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
-    list_cell_s* pTmpCell;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
-    else if(LIST_IsTail(pList) == true)
+    else if(LIST_IsTail(list) == true)
     {
-        *eError = LIST_CELL_NOT_FOUND;
+        *error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent->pNext);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current->next);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            *eError = LIST_CELL_NOT_FOUND;
+            *error = LIST_CELL_NOT_FOUND;
         }
         else
         {
-            pData = pTmpCell->pData;
-            free(pTmpCell);
+            data = tmpCell->data;
+            free(tmpCell);
 
-            *eError = LIST_NO_ERROR;
+            *error = LIST_NO_ERROR;
         }
     }
-    return pData;
+    return data;
 }
 
-const void* LIST_GetPrev(list_s* pList, LIST_Error_e* eError)
+const void* LIST_GetPrev(list_s* list, LIST_Error_e* error)
 {
-    void* pData = NULL;
-    list_cell_s* pTmpCell;
+    void* data = NULL;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        *eError = LIST_EMPTY_LIST;
+        *error = LIST_EMPTY_LIST;
     }
-    else if(LIST_IsHead(pList) == true)
+    else if(LIST_IsHead(list) == true)
     {
-        *eError = LIST_CELL_NOT_FOUND;
+        *error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent->pPrev);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current->prev);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            *eError = LIST_CELL_NOT_FOUND;
+            *error = LIST_CELL_NOT_FOUND;
         }
         else
         {
-            pData = pTmpCell->pData;
-            free(pTmpCell);
+            data = tmpCell->data;
+            free(tmpCell);
 
-            *eError = LIST_NO_ERROR;
+            *error = LIST_NO_ERROR;
         }
     }
-    return pData;
+    return data;
 }
 
-LIST_Error_e LIST_RemoveFirst(list_s* pList)
+LIST_Error_e LIST_RemoveFirst(list_s* list)
 {
-    LIST_Error_e eError;
-    list_cell_s* pTmpCell;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pHead);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->head);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            eError = LIST_EMPTY_LIST;
+            error = LIST_EMPTY_LIST;
         }
         else
         {
-            if(pTmpCell->szDataSize != 0)
+            if(tmpCell->dataSize != 0)
             {
-                free(pTmpCell->pData);
+                free(tmpCell->data);
             }
-            free(pTmpCell);
+            free(tmpCell);
 
-            eError = LIST_NO_ERROR;
+            error = LIST_NO_ERROR;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveLast(list_s* pList)
+LIST_Error_e LIST_RemoveLast(list_s* list)
 {
-    LIST_Error_e eError;
-    list_cell_s* pTmpCell;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pTail);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->tail);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            eError = LIST_EMPTY_LIST;
+            error = LIST_EMPTY_LIST;
         }
         else
         {
-            if(pTmpCell->szDataSize != 0)
+            if(tmpCell->dataSize != 0)
             {
-                free(pTmpCell->pData);
+                free(tmpCell->data);
             }
-            free(pTmpCell);
+            free(tmpCell);
 
-            eError = LIST_NO_ERROR;
+            error = LIST_NO_ERROR;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveCurrent(list_s* pList)
+LIST_Error_e LIST_RemoveCurrent(list_s* list)
 {
-    LIST_Error_e eError;
-    list_cell_s* pTmpCell;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            eError = LIST_EMPTY_LIST;
+            error = LIST_EMPTY_LIST;
         }
         else
         {
-            if(pTmpCell->szDataSize != 0)
+            if(tmpCell->dataSize != 0)
             {
-                free(pTmpCell->pData);
+                free(tmpCell->data);
             }
-            free(pTmpCell);
+            free(tmpCell);
 
-            eError = LIST_NO_ERROR;
+            error = LIST_NO_ERROR;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveNext(list_s* pList)
+LIST_Error_e LIST_RemoveNext(list_s* list)
 {
-    LIST_Error_e eError;
-    list_cell_s* pTmpCell;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(LIST_IsTail(pList) == true)
+    else if(LIST_IsTail(list) == true)
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent->pNext);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current->next);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            eError = LIST_CELL_NOT_FOUND;
+            error = LIST_CELL_NOT_FOUND;
         }
         else
         {
-            if(pTmpCell->szDataSize != 0)
+            if(tmpCell->dataSize != 0)
             {
-                free(pTmpCell->pData);
+                free(tmpCell->data);
             }
-            free(pTmpCell);
+            free(tmpCell);
 
-            eError = LIST_NO_ERROR;
+            error = LIST_NO_ERROR;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemovePrev(list_s* pList)
+LIST_Error_e LIST_RemovePrev(list_s* list)
 {
-    LIST_Error_e eError;
-    list_cell_s* pTmpCell;
+    LIST_Error_e error;
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(LIST_IsHead(pList) == true)
+    else if(LIST_IsHead(list) == true)
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
     }
     else
     {
-        pTmpCell = LIST_DetachCell(pList, pList->pCurrent->pPrev);
+        list_cell_s* tmpCell = LIST_DetachCell(list, list->current->prev);
 
-        if(pTmpCell == NULL)
+        if(tmpCell == NULL)
         {
             /* Si la cellule n'a pas pu etre detachee, on sort en erreur */
-            eError = LIST_CELL_NOT_FOUND;
+            error = LIST_CELL_NOT_FOUND;
         }
         else
         {
-            if(pTmpCell->szDataSize != 0)
+            if(tmpCell->dataSize != 0)
             {
-                free(pTmpCell->pData);
+                free(tmpCell->data);
             }
-            free(pTmpCell);
+            free(tmpCell);
 
-            eError = LIST_NO_ERROR;
+            error = LIST_NO_ERROR;
         }
     }
-    return eError;
+    return error;
 }
 
-list_s* LIST_Clone(const list_s* pList, LIST_Error_e* eError)
+list_s* LIST_Clone(const list_s* list, LIST_Error_e* error)
 {
-    list_cell_s* pCurrentCell = NULL;
+    list_cell_s* currentCell = NULL;
     /* Creation de la liste clone */
-    list_s* sDestList = LIST_Create(pList->mCompar, eError);
+    list_s* destList = LIST_Create(list->compar, error);
 
-    if(*eError == LIST_NO_ERROR)
+    if(*error == LIST_NO_ERROR)
     {
         /* Insertion iterative de tous les elements de la liste originale. */
-        for(pCurrentCell = pList->pHead; pCurrentCell != NULL && *eError == LIST_NO_ERROR; pCurrentCell = pCurrentCell->pNext)
+        for(currentCell = list->head; currentCell != NULL && *error == LIST_NO_ERROR; currentCell = currentCell->next)
         {
-            *eError = LIST_InsertNext(sDestList, pCurrentCell->pData, pCurrentCell->szDataSize);
+            *error = LIST_InsertNext(destList, currentCell->data, currentCell->dataSize);
         }
 
-        if(*eError == LIST_MEMORY_ERROR)
+        if(*error == LIST_MEMORY_ERROR)
         {
             /* Une erreur s'est produite lors de l'insertion, on efface la liste partiellement dupliquee */
-            LIST_Destroy(sDestList);
-            sDestList = NULL;
+            LIST_Destroy(destList);
+            destList = NULL;
         }
         else
         {
             /* Tout s'est bien passe, on initilaise l'element courant */
-            sDestList->pCurrent = sDestList->pHead;
+            destList->current = destList->head;
         }
     }
-    return sDestList;
+    return destList;
 }
 
-LIST_Error_e LIST_SearchData(list_s* pList, const void* pData)
+LIST_Error_e LIST_SearchData(list_s* list, const void* data)
 {
     /* LIST_SearchData() n'est qu'une encapsulation de LIST_SearchDataFct */
-    return LIST_SearchDataFct(pList, pData, NULL);
+    return LIST_SearchDataFct(list, data, NULL);
 }
 
-LIST_Error_e LIST_SearchDataFct(list_s* pList, const void* pData, int (*compar)(const void *, const void *))
+LIST_Error_e LIST_SearchDataFct(list_s* list, const void* data, int (*compar)(const void *, const void *))
 {
-    LIST_Error_e eError;
-    list_cell_s* pCurrentCell;
-    int (*UsedCompar)(const void *, const void *);
+    LIST_Error_e error;
+    list_cell_s* currentCell;
+    int (*usedCompar)(const void *, const void *);
 
     /* On positionne la fonction de recherche a utiliser */
     if(compar != NULL)
     {
-        UsedCompar = compar;
+        usedCompar = compar;
     }
     else
     {
-        UsedCompar = pList->mCompar;
+        usedCompar = list->compar;
     }
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(UsedCompar == NULL)
+    else if(usedCompar == NULL)
     {
-        eError = LIST_NO_COMP_FONCTION;
+        error = LIST_NO_COMP_FONCTION;
     }
     else
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
 
         /* Parcours des elements de la liste jusqu'a trouver l'element recherche ou a atteindre la fin de la liste */
-        for(pCurrentCell = pList->pCurrent; pCurrentCell != NULL; pCurrentCell = pCurrentCell->pNext)
+        for(currentCell = list->current; currentCell != NULL; currentCell = currentCell->next)
         {
             /* L'element recherche est trouve */
-            if(UsedCompar(pData, pCurrentCell->pData) == 0)
+            if(usedCompar(data, currentCell->data) == 0)
             {
-                pList->pCurrent = pCurrentCell;
-                eError = LIST_NO_ERROR;
+                list->current = currentCell;
+                error = LIST_NO_ERROR;
 
                 /* Et on arrete la recherche */
                 break;
             }
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_SearchDataRev(list_s* pList, const void* pData)
+LIST_Error_e LIST_SearchDataRev(list_s* list, const void* data)
 {
     /* LIST_SearchDataRev() n'est qu'une encapsulation de LIST_SearchDataRevFct */
-    return LIST_SearchDataRevFct(pList, pData, NULL);
+    return LIST_SearchDataRevFct(list, data, NULL);
 }
 
-LIST_Error_e LIST_SearchDataRevFct(list_s* pList, const void* pData, int (*compar)(const void *, const void *))
+LIST_Error_e LIST_SearchDataRevFct(list_s* list, const void* data, int (*compar)(const void *, const void *))
 {
-    LIST_Error_e eError;
-    list_cell_s* pCurrentCell;
-    int (*UsedCompar)(const void *, const void *);
+    LIST_Error_e error;
+    list_cell_s* currentCell;
+    int (*usedCompar)(const void *, const void *);
 
     /* On positionne la fonction de recherche a utiliser */
     if(compar != NULL)
     {
-        UsedCompar = compar;
+        usedCompar = compar;
     }
     else
     {
-        UsedCompar = pList->mCompar;
+        usedCompar = list->compar;
     }
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(UsedCompar == NULL)
+    else if(usedCompar == NULL)
     {
-        eError = LIST_NO_COMP_FONCTION;
+        error = LIST_NO_COMP_FONCTION;
     }
     else
     {
-        eError = LIST_CELL_NOT_FOUND;
+        error = LIST_CELL_NOT_FOUND;
 
         /* Parcours des elements de la liste jusqu'a trouver l'element recherche ou a atteindre la tete de la liste */
-        for(pCurrentCell = pList->pCurrent; pCurrentCell != NULL; pCurrentCell = pCurrentCell->pPrev)
+        for(currentCell = list->current; currentCell != NULL; currentCell = currentCell->prev)
         {
-            if(UsedCompar(pData, pCurrentCell->pData) == 0)
+            if(usedCompar(data, currentCell->data) == 0)
             {
                 /* L'element recherche est trouve */
-                pList->pCurrent = pCurrentCell;
-                eError = LIST_NO_ERROR;
+                list->current = currentCell;
+                error = LIST_NO_ERROR;
 
                 /* Et on arrete la recherche */
                 break;
             }
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveData(list_s* pList, const void* pData)
+LIST_Error_e LIST_RemoveData(list_s* list, const void* data)
 {
     /* LIST_RemoveData() n'est qu'une encapsulation de LIST_RemoveData() */
-    return LIST_RemoveDataFct(pList, pData, NULL);
+    return LIST_RemoveDataFct(list, data, NULL);
 }
 
-LIST_Error_e LIST_RemoveDataFct(list_s* pList, const void* pData, int (*compar)(const void *, const void *))
+LIST_Error_e LIST_RemoveDataFct(list_s* list, const void* data, int (*compar)(const void *, const void *))
 {
-    LIST_Error_e eError;
-    list_cell_s* pCurrentCell = pList->pCurrent;
-    int (*UsedCompar)(const void *, const void *);
+    LIST_Error_e error;
+    list_cell_s* currentCell = list->current;
+    int (*usedCompar)(const void *, const void *);
 
     /* On positionne la fonction de recherche a utiliser */
     if(compar != NULL)
     {
-        UsedCompar = compar;
+        usedCompar = compar;
     }
     else
     {
-        UsedCompar = pList->mCompar;
+        usedCompar = list->compar;
     }
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(UsedCompar == NULL)
+    else if(usedCompar == NULL)
     {
-        eError = LIST_NO_COMP_FONCTION;
+        error = LIST_NO_COMP_FONCTION;
     }
     else
     {
         /* Recherche de l'element a supprime */
-        eError = LIST_SearchDataFct(pList, pData, UsedCompar);
+        error = LIST_SearchDataFct(list, data, usedCompar);
 
         /* L'element a ete trouve */
-        if(eError == LIST_NO_ERROR)
+        if(error == LIST_NO_ERROR)
         {
             /* L'element a ete trouve, on le supprime */
-            if(pCurrentCell == pList->pCurrent)
+            if(currentCell == list->current)
             {
-                if(pCurrentCell->pNext != NULL)
+                if(currentCell->next != NULL)
                 {
-                    pCurrentCell = pCurrentCell->pNext;
+                    currentCell = currentCell->next;
                 }
                 else
                 {
-                    pCurrentCell = pCurrentCell->pPrev;
+                    currentCell = currentCell->prev;
                 }
             }
-            eError = LIST_RemoveCurrent(pList);
+            error = LIST_RemoveCurrent(list);
 
             /* Et on restaure l'element courant */
-            pList->pCurrent = pCurrentCell;
+            list->current = currentCell;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveDataRev(list_s* pList, const void* pData)
+LIST_Error_e LIST_RemoveDataRev(list_s* list, const void* data)
 {
     /* LIST_RemoveData() n'est qu'une encapsulation de LIST_RemoveData() */
-    return LIST_RemoveDataRevFct(pList, pData, NULL);
+    return LIST_RemoveDataRevFct(list, data, NULL);
 }
 
-LIST_Error_e LIST_RemoveDataRevFct(list_s* pList, const void* pData, int (*compar)(const void *, const void *))
+LIST_Error_e LIST_RemoveDataRevFct(list_s* list, const void* data, int (*compar)(const void *, const void *))
 {
-    LIST_Error_e eError;
-    list_cell_s* pCurrentCell = pList->pCurrent;
-    int (*UsedCompar)(const void *, const void *);
+    LIST_Error_e error;
+    list_cell_s* currentCell = list->current;
+    int (*usedCompar)(const void *, const void *);
 
     /* On positionne la fonction de recherche a utiliser */
     if(compar != NULL)
     {
-        UsedCompar = compar;
+        usedCompar = compar;
     }
     else
     {
-        UsedCompar = pList->mCompar;
+        usedCompar = list->compar;
     }
 
-    if(LIST_IsEmpty(pList) == true)
+    if(LIST_IsEmpty(list) == true)
     {
-        eError = LIST_EMPTY_LIST;
+        error = LIST_EMPTY_LIST;
     }
-    else if(UsedCompar == NULL)
+    else if(usedCompar == NULL)
     {
-        eError = LIST_NO_COMP_FONCTION;
+        error = LIST_NO_COMP_FONCTION;
     }
     else
     {
         /* Recherche de l'element a supprime */
-        eError = LIST_SearchDataRevFct(pList, pData, UsedCompar);
+        error = LIST_SearchDataRevFct(list, data, usedCompar);
 
         /* L'element a ete trouve */
-        if(eError == LIST_NO_ERROR)
+        if(error == LIST_NO_ERROR)
         {
             /* L'element a ete trouve, on le supprime */
-            if(pCurrentCell == pList->pCurrent)
+            if(currentCell == list->current)
             {
-                if(pCurrentCell->pNext != NULL)
+                if(currentCell->next != NULL)
                 {
-                    pCurrentCell = pCurrentCell->pNext;
+                    currentCell = currentCell->next;
                 }
                 else
                 {
-                    pCurrentCell = pCurrentCell->pPrev;
+                    currentCell = currentCell->prev;
                 }
             }
-            eError = LIST_RemoveCurrent(pList);
+            error = LIST_RemoveCurrent(list);
 
             /* Et on restaure l'element courant */
-            pList->pCurrent = pCurrentCell;
+            list->current = currentCell;
         }
     }
-    return eError;
+    return error;
 }
 
-LIST_Error_e LIST_RemoveAllData(list_s* pList, const void* pData)
+LIST_Error_e LIST_RemoveAllData(list_s* list, const void* data)
 {
     /* LIST_RemoveAllData() n'est qu'une encapsulation de LIST_RemoveAllDataFct() */
-    return LIST_RemoveAllDataFct(pList, pData, NULL);
+    return LIST_RemoveAllDataFct(list, data, NULL);
 }
 
-LIST_Error_e LIST_RemoveAllDataFct(list_s* pList, const void* pData, int (*compar)(const void *, const void *))
+LIST_Error_e LIST_RemoveAllDataFct(list_s* list, const void* data, int (*compar)(const void *, const void *))
 {
-    LIST_Error_e eError = LIST_NO_ERROR;
+    LIST_Error_e error = LIST_NO_ERROR;
 
     /* On efface iterativement toutes les cellules correspondant au critere situee apres l'element courant */
-    while(eError == LIST_NO_ERROR)
+    while(error == LIST_NO_ERROR)
     {
-        eError = LIST_RemoveDataFct(pList, pData, compar);
+        error = LIST_RemoveDataFct(list, data, compar);
     }
 
     /* S'il n'y a plus de cellules correspodantes, la suppression c'est bien passe */
-    if(eError == LIST_CELL_NOT_FOUND)
+    if(error == LIST_CELL_NOT_FOUND)
     {
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
 
     /* puis on efface iterativement toutes les cellules correspondant au critere situee avant l'element courant */
-    while(eError == LIST_NO_ERROR)
+    while(error == LIST_NO_ERROR)
     {
-        eError = LIST_RemoveDataRevFct(pList, pData, compar);
+        error = LIST_RemoveDataRevFct(list, data, compar);
     }
 
     /* S'il n'y a plus de cellules correspodantes, la suppression c'est bien passe */
-    if(eError == LIST_CELL_NOT_FOUND)
+    if(error == LIST_CELL_NOT_FOUND)
     {
-        eError = LIST_NO_ERROR;
+        error = LIST_NO_ERROR;
     }
-    return eError;
+    return error;
 }

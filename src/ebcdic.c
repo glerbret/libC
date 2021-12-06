@@ -20,7 +20,7 @@
 #define ASCII_SP    0x20
 
 /* Table de correspondace ASCII vers EBCDIC */
-static const int aiASCII2EBCDIC[] =
+static const int ASCII2EBCDIC[] =
 {
     /*       ASCII       EBCDIC
              |           |
@@ -431,11 +431,11 @@ int EBCDIC_Version(void)
     return EBCDIC_VERS_MAJ * 10000 + EBCDIC_VERS_MIN * 100 + EBCDIC_VERS_BRCH;
 }
 
-int EBCDIC_ConvertASCII2EBCDIC(int iASCII)
+int EBCDIC_ConvertASCII2EBCDIC(int ascii)
 {
-    if(iASCII < (int)(sizeof aiASCII2EBCDIC / sizeof aiASCII2EBCDIC[0]))
+    if(ascii < (int)(sizeof ASCII2EBCDIC / sizeof ASCII2EBCDIC[0]))
     {
-        return aiASCII2EBCDIC[iASCII];
+        return ASCII2EBCDIC[ascii];
     }
     else
     {
@@ -444,11 +444,11 @@ int EBCDIC_ConvertASCII2EBCDIC(int iASCII)
     }
 }
 
-int EBCDIC_ConvertEBCDIC2ASCII(int iEBCDIC)
+int EBCDIC_ConvertEBCDIC2ASCII(int ebcdic)
 {
-    if(iEBCDIC < (int)(sizeof aiEBCDIC2ASCII / sizeof aiEBCDIC2ASCII[0]))
+    if(ebcdic < (int)(sizeof aiEBCDIC2ASCII / sizeof aiEBCDIC2ASCII[0]))
     {
-        return aiEBCDIC2ASCII[iEBCDIC];
+        return aiEBCDIC2ASCII[ebcdic];
     }
     else
     {

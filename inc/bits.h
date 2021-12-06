@@ -31,43 +31,43 @@ int BITS_Version(void);
 /**
  * @brief Positionnement d'un bit dans un byte
  *
- * @param[in] ucByte Valeur originale du byte
- * @param[in] szBitNumber Position du bit a positionner (CHAR_BIT MSB - 0 LSB)
+ * @param[in] byte Valeur originale du byte
+ * @param[in] bitNumber Position du bit a positionner (CHAR_BIT MSB - 0 LSB)
  *
  * @return Valeur finale du byte
  */
-unsigned char BITS_SetBit(unsigned char ucByte, size_t szBitNumber);
+unsigned char BITS_SetBit(unsigned char byte, size_t bitNumber);
 
 /**
  * @brief Suppression d'un bit dans un byte
  *
- * @param[in] ucByte Valeur originale du byte
- * @param[in] szBitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
+ * @param[in] byte Valeur originale du byte
+ * @param[in] bitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
  *
  * @return Valeur finale du byte
  */
-unsigned char BITS_ClearBit(unsigned char ucByte, size_t szBitNumber);
+unsigned char BITS_ClearBit(unsigned char byte, size_t bitNumber);
 
 /**
  * @brief Test d'un bit dans un byte
  *
- * @param[in] ucByte Valeur originale du byte
- * @param[in] szBitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
+ * @param[in] byte Valeur originale du byte
+ * @param[in] bitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
  *
  * @return
  *  - true si le bit est positionne
  *  - false sinon
  */
-bool BITS_TestBit(unsigned char ucByte, size_t szBitNumber);
+bool BITS_TestBit(unsigned char byte, size_t bitNumber);
 
 /**
  * @brief Inversion des bits d'un octet (le bit 0 devient le bit 7, etc.)
  *
- * @param[in] ucByte Valeur originale de l'octet
+ * @param[in] byte Valeur originale de l'octet
  *
  * @return Valeur finale de l'octet
 */
-unsigned char  BITS_ReverseBit(unsigned char ucByte);
+unsigned char  BITS_ReverseBit(unsigned char byte);
 
 #ifdef __cplusplus
 }

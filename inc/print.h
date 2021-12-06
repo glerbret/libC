@@ -32,25 +32,25 @@ int PRINT_Version(void);
 /**
  * @brief Construction d'une sortie formattee
  *
- * @param[out] pcDst Chaine contenant la sortie formattee
- * @param[in] szLgDst Taille maximale de la sortie
- * @param[in] pcFormat Chaine de format
+ * @param[out] dst Chaine contenant la sortie formattee
+ * @param[in] dstSize Taille maximale de la sortie
+ * @param[in] format Chaine de format
  * @param[in] ap Liste de parametres
  *
  * @return Nombre de caracteres imprimes sans le 0 final.
  */
-int PRINT_vsnprintf(char *pcDst, size_t szLgDst, const char *pcFormat, va_list ap);
+int PRINT_vsnprintf(char* dst, size_t dstSize, const char* format, va_list ap);
 
 /**
  * @brief Construction d'une sortie formattee
  *
- * @param[out] pcDst Chaine contenant la sortie formattee
- * @param[in] szLgDst Taille maximale de la sortie
- * @param[in] pcFormat Chaine de format
+ * @param[out] dst Chaine contenant la sortie formattee
+ * @param[in] dstSize Taille maximale de la sortie
+ * @param[in] format Chaine de format
  *
  * @return Nombre de caracteres imprimes sans le 0 final
  */
-int PRINT_snprintf(char *pcDst, size_t szLgDst, const char *pcFormat, ...);
+int PRINT_snprintf(char* dst, size_t dstSize, const char* format, ...);
 
 #ifdef __cplusplus
 }

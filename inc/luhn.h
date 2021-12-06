@@ -38,22 +38,22 @@ int LUHN_Version(void);
 /**
  * @brief Calcul de la cle de Luhn
  *
- * @param[in] pcNumber Numero dont on veut calculer la cle de Luhn
+ * @param[in] number Numero dont on veut calculer la cle de Luhn
  *
  * @return Cle de Luhn sous sa forme ASCII
  */
-char LUHN_CalculalteLuhnKey(const char* pcNumber);
+char LUHN_CalculalteLuhnKey(const char* number);
 
 /**
  * @brief Verification de la cle de Luhn
  *
- * @param[in] pcNumber Numero a verifier
+ * @param[in] number Numero a verifier
  *
  * @return
  *  - LUHN_OK pour une cle de Luhn correcte
  *  - LUHN_KO sinon
  */
-LUHN_Res_e LUHN_CheckLuhnKey(const char* pcNumber);
+LUHN_Res_e LUHN_CheckLuhnKey(const char* number);
 
 #ifdef __cplusplus
 }

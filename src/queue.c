@@ -24,34 +24,33 @@
 
 typedef struct queue_cell
 {
-    struct queue_cell*  pNext;
-    struct queue_cell*  pPrev;
-    void*               pData;
-    size_t              szDataSize;
+    struct queue_cell*  next;
+    struct queue_cell*  prev;
+    void*               data;
+    size_t              dataSize;
 } queue_cell_s;
 
 struct queue
 {
-    queue_cell_s*   pHead;
-    queue_cell_s*   pTail;
-    size_t          szNbCells;
+    queue_cell_s*   head;
+    queue_cell_s*   tail;
+    size_t          nbCells;
 };
 
-static queue_cell_s* QUEUE_AllocCell(const void* pData, size_t szDataSize)
+static queue_cell_s* QUEUE_AllocCell(const void* data, size_t dataSize)
 {
-    queue_cell_s* pCell = NULL;
+    queue_cell_s* cell = NULL;
 
-
-    if(pData == NULL || szDataSize == 0)
+    if(data == NULL || dataSize == 0)
     {
         /* Il n'y a pas d'element a ajouter, on arrete ici et on retourne NULL */
-        pCell = NULL;
+        cell = NULL;
     }
     else
     {
-        pCell = malloc(sizeof * pCell);
+        cell = malloc(sizeof *cell);
 
-        if(pCell == NULL)
+        if(cell == NULL)
         {
             /* Echec de l'allocation, on retourne NULL */
             /* NOP */
@@ -59,54 +58,54 @@ static queue_cell_s* QUEUE_AllocCell(const void* pData, size_t szDataSize)
         else
         {
             /* Intialisation de la cellule */
-            pCell->pNext = NULL;
-            pCell->pPrev = NULL;
+            cell->next = NULL;
+            cell->prev = NULL;
 
-            pCell->pData = malloc(szDataSize);
-            if(pCell->pData == NULL)
+            cell->data = malloc(dataSize);
+            if(cell->data == NULL)
             {
                 /* Echec de l'allocation, on detruit la cellule et on retourne NULL */
-                free(pCell), pCell = NULL;
+                free(cell), cell = NULL;
             }
             else
             {
-                memcpy(pCell->pData, pData, szDataSize);
-                pCell->szDataSize = szDataSize;
+                memcpy(cell->data, data, dataSize);
+                cell->dataSize = dataSize;
             }
 
         }
     }
 
-    return pCell;
+    return cell;
 }
 
-static queue_cell_s* QUEUE_DetachCell(queue_s* pQueue)
+static queue_cell_s* QUEUE_DetachCell(queue_s* queue)
 {
-    queue_cell_s* pTmpCell = NULL;
+    queue_cell_s* tmpCell = NULL;
 
-    if(QUEUE_IsEmpty(pQueue) == true)
+    if(QUEUE_IsEmpty(queue) == true)
     {
         /* Il n'y a pas de cellule a retirer, on arrete ici et on retourne NULL */
-        pTmpCell = NULL;
+        tmpCell = NULL;
     }
     else
     {
         /* On detache la cellule */
-        pTmpCell = pQueue->pTail;
-        pQueue->pTail = pQueue->pTail->pPrev;
-        if(pQueue->pTail != NULL)
+        tmpCell = queue->tail;
+        queue->tail = queue->tail->prev;
+        if(queue->tail != NULL)
         {
-            pQueue->pTail->pNext = NULL;
+            queue->tail->next = NULL;
         }
         else
         {
             /* La liste est maintenant vide */
-            pQueue->pHead = NULL;
+            queue->head = NULL;
         }
 
-        pQueue->szNbCells--;
+        queue->nbCells--;
     }
-    return pTmpCell;
+    return tmpCell;
 }
 
 const char* QUEUE_Identifier(void)
@@ -119,155 +118,155 @@ int QUEUE_Version(void)
     return QUEUE_VERS_MAJ * 10000 + QUEUE_VERS_MIN * 100 + QUEUE_VERS_BRCH;
 }
 
-queue_s* QUEUE_Create(QUEUE_Error_e* eError)
+queue_s* QUEUE_Create(QUEUE_Error_e* error)
 {
-    queue_s* pQueue = malloc(sizeof * pQueue);
+    queue_s* queue = malloc(sizeof* queue);
 
-    if(pQueue == NULL)
+    if(queue == NULL)
     {
         /* La file n'a pas pu etre creer */
-        *eError = QUEUE_MEMORY_ERROR;
+        *error = QUEUE_MEMORY_ERROR;
     }
     else
     {
         /* Initialisation de la file */
-        pQueue->pHead = NULL;
-        pQueue->pTail = NULL;
-        pQueue->szNbCells = 0;
-        *eError = QUEUE_NO_ERROR;
+        queue->head = NULL;
+        queue->tail = NULL;
+        queue->nbCells = 0;
+        *error = QUEUE_NO_ERROR;
     }
-    return pQueue;
+    return queue;
 }
 
-void QUEUE_Destroy(queue_s* pQueue)
+void QUEUE_Destroy(queue_s* queue)
 {
     /* On retire iterativement toutes les cellules de la file */
-    while(QUEUE_Remove(pQueue) != QUEUE_EMPTY_QUEUE)
+    while(QUEUE_Remove(queue) != QUEUE_EMPTY_QUEUE)
     {
         /* NOP */
     }
 
     /* Puis on detruit la file*/
-    free(pQueue), pQueue = NULL;
+    free(queue), queue = NULL;
 }
 
-bool QUEUE_IsEmpty(const queue_s* pQueue)
+bool QUEUE_IsEmpty(const queue_s* queue)
 {
-    return pQueue->pHead == NULL;
+    return queue->head == NULL;
 }
 
-size_t QUEUE_Size(const queue_s* pQueue)
+size_t QUEUE_Size(const queue_s* queue)
 {
-    return pQueue->szNbCells;
+    return queue->nbCells;
 }
 
-QUEUE_Error_e QUEUE_Enqueue(queue_s* pQueue, const void* pData, size_t szDataSize)
+QUEUE_Error_e QUEUE_Enqueue(queue_s* queue, const void* data, size_t dataSize)
 {
-    queue_cell_s* pCell = QUEUE_AllocCell(pData, szDataSize);
-    QUEUE_Error_e eError = QUEUE_NO_ERROR;
+    queue_cell_s* cell = QUEUE_AllocCell(data, dataSize);
+    QUEUE_Error_e error = QUEUE_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = QUEUE_MEMORY_ERROR;
+        error = QUEUE_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        pCell->pNext = pQueue->pHead;
-        pCell->pPrev = NULL;
-        if(pQueue->pHead != NULL)
+        cell->next = queue->head;
+        cell->prev = NULL;
+        if(queue->head != NULL)
         {
-            pQueue->pHead->pPrev = pCell;
+            queue->head->prev = cell;
         }
 
         /* Mise a jour de la file */
-        pQueue->pHead = pCell;
-        if(pQueue->szNbCells == 0)
+        queue->head = cell;
+        if(queue->nbCells == 0)
         {
-            pQueue->pTail = pCell;
+            queue->tail = cell;
         }
-        pQueue->szNbCells++;
+        queue->nbCells++;
     }
-    return eError;
+    return error;
 }
 
-const void* QUEUE_Dequeue(queue_s* pQueue, QUEUE_Error_e* eError)
+const void* QUEUE_Dequeue(queue_s* queue, QUEUE_Error_e* error)
 {
-    void* pData = NULL;
-    queue_cell_s* pTmpCell = QUEUE_DetachCell(pQueue);
+    void* data = NULL;
+    queue_cell_s* tmpCell = QUEUE_DetachCell(queue);
 
-    if(pTmpCell == NULL)
+    if(tmpCell == NULL)
     {
-        *eError = QUEUE_EMPTY_QUEUE;
+        *error = QUEUE_EMPTY_QUEUE;
     }
     else
     {
-        pData = pTmpCell->pData;
-        free(pTmpCell);
+        data = tmpCell->data;
+        free(tmpCell);
 
-        *eError = QUEUE_NO_ERROR;
+        *error = QUEUE_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* QUEUE_Peek(const queue_s* pQueue, QUEUE_Error_e* eError)
+const void* QUEUE_Peek(const queue_s* queue, QUEUE_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(QUEUE_IsEmpty(pQueue) == true)
+    if(QUEUE_IsEmpty(queue) == true)
     {
-        *eError = QUEUE_EMPTY_QUEUE;
+        *error = QUEUE_EMPTY_QUEUE;
     }
     else
     {
-        pData = pQueue->pTail->pData;
-        *eError = QUEUE_NO_ERROR;
+        data = queue->tail->data;
+        *error = QUEUE_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-QUEUE_Error_e QUEUE_Remove(queue_s* pQueue)
+QUEUE_Error_e QUEUE_Remove(queue_s* queue)
 {
-    queue_cell_s* pTmpCell = QUEUE_DetachCell(pQueue);
-    QUEUE_Error_e eError;
+    queue_cell_s* tmpCell = QUEUE_DetachCell(queue);
+    QUEUE_Error_e error;
 
-    if(pTmpCell == NULL)
+    if(tmpCell == NULL)
     {
-        eError = QUEUE_EMPTY_QUEUE;
+        error = QUEUE_EMPTY_QUEUE;
     }
     else
     {
-        if(pTmpCell->szDataSize)
+        if(tmpCell->dataSize)
         {
-            free(pTmpCell->pData);
+            free(tmpCell->data);
         }
-        free(pTmpCell);
+        free(tmpCell);
 
-        eError = QUEUE_NO_ERROR;
+        error = QUEUE_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-queue_s* QUEUE_Clone(const queue_s* pQueue, QUEUE_Error_e* eError)
+queue_s* QUEUE_Clone(const queue_s* queue, QUEUE_Error_e* error)
 {
-    queue_cell_s* pCurrentCell = NULL;
+    queue_cell_s* currentCell = NULL;
     /* Creation de la file clone */
-    queue_s* pDestQueue = QUEUE_Create(eError);
+    queue_s* dstQueue = QUEUE_Create(error);
 
-    if(*eError == QUEUE_NO_ERROR)
+    if(*error == QUEUE_NO_ERROR)
     {
         /* Insertion iterative de tous les elements de la file originale. */
-        for(pCurrentCell = pQueue->pTail; pCurrentCell != NULL && *eError == QUEUE_NO_ERROR; pCurrentCell = pCurrentCell->pPrev)
+        for(currentCell = queue->tail; currentCell != NULL && *error == QUEUE_NO_ERROR; currentCell = currentCell->prev)
         {
-            *eError = QUEUE_Enqueue(pDestQueue, pCurrentCell->pData, pCurrentCell->szDataSize);
+            *error = QUEUE_Enqueue(dstQueue, currentCell->data, currentCell->dataSize);
         }
 
         /* Une erreur s'est produite lors de l'insertion, on efface la file partiellement dupliquee */
-        if(*eError == QUEUE_MEMORY_ERROR)
+        if(*error == QUEUE_MEMORY_ERROR)
         {
-            QUEUE_Destroy(pDestQueue);
-            pDestQueue = NULL;
+            QUEUE_Destroy(dstQueue);
+            dstQueue = NULL;
         }
     }
-    return pDestQueue;
+    return dstQueue;
 }

@@ -24,32 +24,32 @@
 
 typedef struct stack_cell
 {
-    struct stack_cell*  pNext;
-    struct stack_cell*  pPrev;
-    void*               pData;
-    size_t              szDataSize;
+    struct stack_cell*  next;
+    struct stack_cell*  prev;
+    void*               data;
+    size_t              dataSize;
 } stack_cell_s;
 
 struct stack
 {
-    stack_cell_s*   pHead;
-    stack_cell_s*   pTail;
-    size_t          szNbCells;
+    stack_cell_s*   head;
+    stack_cell_s*   tail;
+    size_t          nbCells;
 };
 
-static stack_cell_s* STACK_AllocCell(const void* pData, size_t szDataSize)
+static stack_cell_s* STACK_AllocCell(const void* data, size_t dataSize)
 {
-    stack_cell_s* pCell = NULL;
+    stack_cell_s* cell = NULL;
 
-    if(pData == NULL || szDataSize == 0)
+    if(data == NULL || dataSize == 0)
     {
         /* Il n'y a pas d'element a ajouter, on arrete ici et on retourne NULL */
-        pCell = NULL;
+        cell = NULL;
     }
     else
     {
-        pCell = malloc(sizeof * pCell);
-        if(pCell == NULL)
+        cell = malloc(sizeof * cell);
+        if(cell == NULL)
         {
             /* Echec de l'allocation, on retourne NULL */
             /* NOP */
@@ -57,53 +57,53 @@ static stack_cell_s* STACK_AllocCell(const void* pData, size_t szDataSize)
         else
         {
             /* Intialisation de la cellule */
-            pCell->pNext = NULL;
-            pCell->pPrev = NULL;
+            cell->next = NULL;
+            cell->prev = NULL;
 
-            pCell->pData = malloc(szDataSize);
-            if(pCell->pData == NULL)
+            cell->data = malloc(dataSize);
+            if(cell->data == NULL)
             {
                 /* Echec de l'allocation, on detruit la cellule et on retourne NULL */
-                free(pCell), pCell = NULL;
+                free(cell), cell = NULL;
             }
             else
             {
-                memcpy(pCell->pData, pData, szDataSize);
-                pCell->szDataSize = szDataSize;
+                memcpy(cell->data, data, dataSize);
+                cell->dataSize = dataSize;
             }
 
         }
     }
-    return pCell;
+    return cell;
 }
 
-static stack_cell_s* STACK_DetachCell(stack_s* pStack)
+static stack_cell_s* STACK_DetachCell(stack_s* stack)
 {
-    stack_cell_s*  pTmpCell = NULL;
+    stack_cell_s* tmpCell = NULL;
 
-    if(STACK_IsEmpty(pStack) == true)
+    if(STACK_IsEmpty(stack) == true)
     {
         /* Il n'y a pas de cellule a retirer, on arrete ici et on retourne NULL */
-        pTmpCell = NULL;
+        tmpCell = NULL;
     }
     else
     {
         /* On detache la cellule */
-        pTmpCell = pStack->pHead;
-        pStack->pHead = pTmpCell->pNext;
-        if(pStack->pHead != NULL)
+        tmpCell = stack->head;
+        stack->head = tmpCell->next;
+        if(stack->head != NULL)
         {
-            pStack->pHead->pPrev = NULL;
+            stack->head->prev = NULL;
         }
         else
         {
             /* La liste est maintenant vide */
-            pStack->pTail = NULL;
+            stack->tail = NULL;
         }
 
-        pStack->szNbCells--;
+        stack->nbCells--;
     }
-    return pTmpCell;
+    return tmpCell;
 }
 
 const char* STACK_Identifier(void)
@@ -116,156 +116,156 @@ int STACK_Version(void)
     return STACK_VERS_MAJ * 10000 + STACK_VERS_MIN * 100 + STACK_VERS_BRCH;
 }
 
-stack_s* STACK_Create(STACK_Error_e* eError)
+stack_s* STACK_Create(STACK_Error_e* error)
 {
-    stack_s* pStack = malloc(sizeof * pStack);
+    stack_s* stack = malloc(sizeof * stack);
 
-    if(pStack == NULL)
+    if(stack == NULL)
     {
         /* La pile n'a pas pu etre creer */
-        *eError = STACK_MEMORY_ERROR;
+        *error = STACK_MEMORY_ERROR;
     }
     else
     {
         /* Initialisation de la pile */
-        pStack->pHead = NULL;
-        pStack->pTail = NULL;
-        pStack->szNbCells = 0;
-        *eError = STACK_NO_ERROR;
+        stack->head = NULL;
+        stack->tail = NULL;
+        stack->nbCells = 0;
+        *error = STACK_NO_ERROR;
     }
-    return pStack;
+    return stack;
 }
 
-void STACK_Destroy(stack_s* pStack)
+void STACK_Destroy(stack_s* stack)
 {
     /* On retire iterativement toutes les cellules de la pile */
-    while(STACK_Remove(pStack) != STACK_EMPTY_STACK)
+    while(STACK_Remove(stack) != STACK_EMPTY_STACK)
     {
         /* NOP */
     }
 
     /* Puis on detruit la pile*/
-    free(pStack);
+    free(stack);
 }
 
-bool STACK_IsEmpty(const stack_s* pStack)
+bool STACK_IsEmpty(const stack_s* stack)
 {
-    return pStack->pHead == NULL;
+    return stack->head == NULL;
 }
 
-size_t STACK_Size(const stack_s* pStack)
+size_t STACK_Size(const stack_s* stack)
 {
-    return pStack->szNbCells;
+    return stack->nbCells;
 }
 
-STACK_Error_e STACK_Push(stack_s* pStack, const void* pData, size_t szDataSize)
+STACK_Error_e STACK_Push(stack_s* stack, const void* data, size_t dataSize)
 {
-    stack_cell_s* pCell = STACK_AllocCell(pData, szDataSize);
-    STACK_Error_e eError = STACK_NO_ERROR;
+    stack_cell_s* cell = STACK_AllocCell(data, dataSize);
+    STACK_Error_e error = STACK_NO_ERROR;
 
-    if(pCell == NULL)
+    if(cell == NULL)
     {
-        eError = STACK_MEMORY_ERROR;
+        error = STACK_MEMORY_ERROR;
     }
     else
     {
         /* Mise a jour du chainage des elements */
-        pCell->pNext = pStack->pHead;
-        pCell->pPrev = NULL;
+        cell->next = stack->head;
+        cell->prev = NULL;
 
-        if(pStack->pHead != NULL)
+        if(stack->head != NULL)
         {
-            pStack->pHead->pPrev = pCell;
+            stack->head->prev = cell;
         }
 
         /* Mise a jour de la pile */
-        pStack->pHead = pCell;
-        if(pStack->szNbCells == 0)
+        stack->head = cell;
+        if(stack->nbCells == 0)
         {
-            pStack->pTail = pCell;
+            stack->tail = cell;
         }
-        pStack->szNbCells++;
+        stack->nbCells++;
     }
-    return eError;
+    return error;
 }
 
-const void* STACK_Pop(stack_s* pStack, STACK_Error_e* eError)
+const void* STACK_Pop(stack_s* stack, STACK_Error_e* error)
 {
-    void* pData = NULL;
-    stack_cell_s* pTmpCell = STACK_DetachCell(pStack);
+    void* data = NULL;
+    stack_cell_s* tmpCell = STACK_DetachCell(stack);
 
-    if(pTmpCell == NULL)
+    if(tmpCell == NULL)
     {
-        *eError = STACK_EMPTY_STACK;
+        *error = STACK_EMPTY_STACK;
     }
     else
     {
-        pData = pTmpCell->pData;
-        free(pTmpCell);
+        data = tmpCell->data;
+        free(tmpCell);
 
-        *eError = STACK_NO_ERROR;
+        *error = STACK_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-const void* STACK_Peek(const stack_s* pStack, STACK_Error_e* eError)
+const void* STACK_Peek(const stack_s* stack, STACK_Error_e* error)
 {
-    void* pData = NULL;
+    void* data = NULL;
 
-    if(STACK_IsEmpty(pStack) == true)
+    if(STACK_IsEmpty(stack) == true)
     {
-        *eError = STACK_EMPTY_STACK;
+        *error = STACK_EMPTY_STACK;
     }
     else
     {
-        pData = pStack->pHead->pData;
-        *eError = STACK_NO_ERROR;
+        data = stack->head->data;
+        *error = STACK_NO_ERROR;
     }
-    return pData;
+    return data;
 }
 
-STACK_Error_e STACK_Remove(stack_s* pStack)
+STACK_Error_e STACK_Remove(stack_s* stack)
 {
-    stack_cell_s* pTmpCell = STACK_DetachCell(pStack);
-    STACK_Error_e eError;
+    stack_cell_s* tmpCell = STACK_DetachCell(stack);
+    STACK_Error_e error;
 
-    if(pTmpCell == NULL)
+    if(tmpCell == NULL)
     {
-        eError = STACK_EMPTY_STACK;
+        error = STACK_EMPTY_STACK;
     }
     else
     {
-        if(pTmpCell->szDataSize)
+        if(tmpCell->dataSize)
         {
-            free(pTmpCell->pData);
+            free(tmpCell->data);
         }
-        free(pTmpCell);
+        free(tmpCell);
 
-        eError = STACK_NO_ERROR;
+        error = STACK_NO_ERROR;
     }
-    return eError;
+    return error;
 }
 
-stack_s* STACK_Clone(const stack_s* pStack, STACK_Error_e* eError)
+stack_s* STACK_Clone(const stack_s* stack, STACK_Error_e* error)
 {
-    stack_cell_s* pCurrentCell = NULL;
+    stack_cell_s* currentCell = NULL;
     /* Creation de la pile clone */
-    stack_s* pDestStack = STACK_Create(eError);
+    stack_s* dstStack = STACK_Create(error);
 
-    if(*eError == STACK_NO_ERROR)
+    if(*error == STACK_NO_ERROR)
     {
         /* Insertion iterative de tous les elements de la pile originale. */
-        for(pCurrentCell = pStack->pTail; pCurrentCell != NULL && *eError == STACK_NO_ERROR; pCurrentCell = pCurrentCell->pPrev)
+        for(currentCell = stack->tail; currentCell != NULL && *error == STACK_NO_ERROR; currentCell = currentCell->prev)
         {
-            *eError = STACK_Push(pDestStack, pCurrentCell->pData, pCurrentCell->szDataSize);
+            *error = STACK_Push(dstStack, currentCell->data, currentCell->dataSize);
         }
 
         /* Une erreur s'est produite lors de l'insertion, on efface la pile partiellement dupliquee */
-        if(*eError == STACK_MEMORY_ERROR)
+        if(*error == STACK_MEMORY_ERROR)
         {
-            STACK_Destroy(pDestStack);
-            pDestStack = NULL;
+            STACK_Destroy(dstStack);
+            dstStack = NULL;
         }
     }
-    return pDestStack;
+    return dstStack;
 }

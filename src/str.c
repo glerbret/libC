@@ -30,204 +30,204 @@ int STR_Version(void)
     return STR_VERS_MAJ * 10000 + STR_VERS_MIN * 100 + STR_VERS_BRCH;
 }
 
-char* STR_DelChar(char* pcDst, const char* pcSrc, size_t szLgDst, char cChar2Delete)
+char* STR_DelChar(char* dst, const char* src, size_t dstSize, char char2Delete)
 {
     /* Verification des conditions initiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
-    for(; *pcSrc != '\0' && szLgDst > 1; pcSrc++)
+    for(; *src != '\0' && dstSize > 1; src++)
     {
-        if(*pcSrc != cChar2Delete)
+        if(*src != char2Delete)
         {
             /* Le caractere courant doit etre conserve */
-            *pcDst = *pcSrc;
-            pcDst++;
-            szLgDst--;
+            *dst = *src;
+            dst++;
+            dstSize--;
         }
     }
 
     /* Une chaine se termine par un 0 */
-    *pcDst = '\0';
-    return pcDst;
+    *dst = '\0';
+    return dst;
 }
 
-char* STR_Strip(char* pcDst, const char* pcSrc, size_t szLgDst)
+char* STR_Strip(char* dst, const char* src, size_t dstSize)
 {
-    char* pcSavDst = pcDst;
+    char* saveDst = dst;
 
     /* Verification des conditions initiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
     /* Recherche du premier caractere non blanc de la chaine */
-    for(; isspace(*pcSrc) != 0 && *pcSrc != '\0'; pcSrc++)
+    for(; isspace(*src) != 0 && *src != '\0'; src++)
     {
         /* NOP */
     }
 
     /* Suppression des espaces superlus en debut de chaine */
-    for(; *pcSrc != '\0' && szLgDst > 1; pcSrc++, szLgDst--, pcDst++)
+    for(; *src != '\0' && dstSize > 1; src++, dstSize--, dst++)
     {
-        *pcDst = *pcSrc;
+        *dst = *src;
     }
 
     /* Suppression des espaces superlus en fin de chaine
        Si rien n'a ete copie dans la chaine resultante (chaine initiale ne
        contenant que des espaces ou longueur de la chaine resultante de 1),
        on ne fait rien */
-    for(; pcSavDst != pcDst && isspace(*(pcDst - 1)) != 0; pcDst--)
+    for(; saveDst != dst && isspace(*(dst - 1)) != 0; dst--)
     {
         /* NOP */
     }
 
     /* Une chaine se termine par un 0 */
-    *pcDst = '\0';
-    return pcSavDst;
+    *dst = '\0';
+    return saveDst;
 }
 
-char* STR_String2Lower(char* pcDst, const char* pcSrc, size_t szLgDst)
+char* STR_String2Lower(char* dst, const char* src, size_t dstSize)
 {
     /* Verication des conditions intiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
     /* Parcours iteratif de la chaine de caractere avec conversion en minuscule */
-    for(; *pcSrc != '\0' && szLgDst > 1; szLgDst--, pcDst++, pcSrc++)
+    for(; *src != '\0' && dstSize > 1; dstSize--, dst++, src++)
     {
-        *pcDst = (char)tolower(*pcSrc);
+        *dst = (char)tolower(*src);
     }
 
     /* Une chaine se termine par un 0 */
-    *pcDst = '\0';
-    return pcDst;
+    *dst = '\0';
+    return dst;
 }
 
-char* STR_String2Upper(char* pcDst, const char* pcSrc, size_t szLgDst)
+char* STR_String2Upper(char* dst, const char* src, size_t dstSize)
 {
     /* Verication des conditions intiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
     /* Parcours iteratif de la chaine de caractere avec conversion en majuscule */
-    for(; *pcSrc != '\0' && szLgDst > 1; szLgDst--, pcDst++, pcSrc++)
+    for(; *src != '\0' && dstSize > 1; dstSize--, dst++, src++)
     {
-        *pcDst = (char)toupper(*pcSrc);
+        *dst = (char)toupper(*src);
     }
 
     /* Une chaine se termine par un 0 */
-    *pcDst = '\0';
-    return pcDst;
+    *dst = '\0';
+    return dst;
 }
 
-char* STR_LeftPadding(char* pcDst, const char* pcSrc, size_t szLgDst, char cPaddingChar)
+char* STR_LeftPadding(char* dst, const char* src, size_t dstSize, char padding)
 {
-    size_t szLgSrc;
+    size_t srcSize;
 
     /* Verification des conditions initiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
-    szLgSrc = strlen(pcSrc);
+    srcSize = strlen(src);
 
-    if(szLgSrc >= szLgDst)
+    if(srcSize >= dstSize)
     {
         /* La chaine intiale est trop longue, on tronque */
-        memcpy(pcDst, pcSrc, szLgDst - 1);
+        memcpy(dst, src, dstSize - 1);
     }
     else
     {
         /* On remplit le buffer avec le caractere de padding ... */
-        memset(pcDst, cPaddingChar, szLgDst - 1);
+        memset(dst, padding, dstSize - 1);
 
         /* ... et on copie la chaine initiale a la bonne position */
-        memcpy(pcDst + szLgDst - szLgSrc - 1, pcSrc, szLgSrc);
+        memcpy(dst + dstSize - srcSize - 1, src, srcSize);
     }
 
     /* Une chaine se termine par un 0 */
-    pcDst[szLgDst - 1] = '\0';
-    return pcDst;
+    dst[dstSize - 1] = '\0';
+    return dst;
 }
 
-char* STR_RightPadding(char* pcDst, const char* pcSrc, size_t szLgDst, char cPaddingChar)
+char* STR_RightPadding(char* dst, const char* src, size_t dstSize, char padding)
 {
-    size_t szLgSrc;
+    size_t srcSize;
 
     /* Verification des conditions initiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
-    szLgSrc = strlen(pcSrc);
+    srcSize = strlen(src);
 
-    if(szLgSrc >= szLgDst)
+    if(srcSize >= dstSize)
     {
         /* La chaine intiale est trop longue, on tronque */
-        memcpy(pcDst, pcSrc, szLgDst - 1);
+        memcpy(dst, src, dstSize - 1);
     }
     else
     {
         /* On remplit le buffer avec le caractere de padding ... */
-        memset(pcDst, cPaddingChar, szLgDst - 1);
+        memset(dst, padding, dstSize - 1);
 
         /* ... et on copie la chaine initiale a la bonne position */
-        memcpy(pcDst, pcSrc, szLgSrc);
+        memcpy(dst, src, srcSize);
     }
 
     /* Une chaine se termine par un 0 */
-    pcDst[szLgDst - 1] = '\0';
-    return pcDst;
+    dst[dstSize - 1] = '\0';
+    return dst;
 }
 
-char* STR_Center(char* pcDst, const char* pcSrc, size_t szLgDst, char cPaddingChar)
+char* STR_Center(char* dst, const char* src, size_t dstSize, char padding)
 {
-    size_t szLgSrc;
+    size_t srcSize;
 
     /* Verification des conditions initiales */
-    if(pcDst == NULL || pcSrc == NULL || szLgDst == 0)
+    if(dst == NULL || src == NULL || dstSize == 0)
     {
         return NULL;
     }
 
-    szLgSrc = strlen(pcSrc);
+    srcSize = strlen(src);
 
-    if(szLgSrc >= szLgDst)
+    if(srcSize >= dstSize)
     {
         /* La chaine intiale est trop longue, on tronque */
-        memcpy(pcDst, pcSrc, szLgDst - 1);
+        memcpy(dst, src, dstSize - 1);
     }
     else
     {
         /* On remplit le buffer avec le caractere de padding ... */
-        memset(pcDst, cPaddingChar, szLgDst - 1);
+        memset(dst, padding, dstSize - 1);
 
         /* ... et on copie la chaine initiale a la bonne position */
-        memcpy(pcDst + ((szLgDst - 1 - szLgSrc) / 2), pcSrc, szLgSrc);
+        memcpy(dst + ((dstSize - 1 - srcSize) / 2), src, srcSize);
     }
 
     /* Une chaine se termine par un 0 */
-    pcDst[szLgDst - 1] = '\0';
-    return pcDst;
+    dst[dstSize - 1] = '\0';
+    return dst;
 }
 
-char* STR_StrDup(const char* pcSrc)
+char* STR_StrDup(const char* src)
 {
-    char* pcDst = malloc(strlen(pcSrc) + 1);
-    if(pcDst != NULL)
+    char* dst = malloc(strlen(src) + 1);
+    if(dst != NULL)
     {
-        strcpy(pcDst, pcSrc);
+        strcpy(dst, src);
     }
 
-    return pcDst;
+    return dst;
 }

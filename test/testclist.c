@@ -6,23 +6,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int TstCompar(const void* pData1, const void* pData2)
+static int TstCompar(const void* data1, const void* data2)
 {
-    return strcmp((const char*)pData1, (const char*)pData2);
+    return strcmp((const char*)data1, (const char*)data2);
 }
 
 int TstCList(void)
 {
-    int iResult = 0;
-    size_t szNbInser = 0;
-    size_t szNbCloneInser = 0;
-    clist_s* pList1;
-    clist_s* pList2;
-    clist_s* pCloneList1;
-    clist_s* pCloneList2;
-    CLIST_Error_e eError;
-    const char* pcData;
-    const char* acChaine[] =
+    int result = 0;
+    size_t nbInser = 0;
+    size_t nbCloneInser = 0;
+    clist_s* list1;
+    clist_s* list2;
+    clist_s* cloneList1;
+    clist_s* cloneList2;
+    CLIST_Error_e error;
+    const char* data;
+    const char* string[] =
     {
         "Chaine1",
         "Chaine2",
@@ -31,7 +31,7 @@ int TstCList(void)
         "Chaine5",
         "Chaine6"
     };
-    const char* acChaineSearch[] =
+    const char* searchedString[] =
     {
         "ChaineA",
         "ChaineB",
@@ -48,8 +48,8 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_Init() */
     {
-        pList1 = CLIST_Create(NULL, &eError);
-        if(pList1 == NULL || eError != CLIST_NO_ERROR)
+        list1 = CLIST_Create(NULL, &error);
+        if(list1 == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_Create) Test creation d'une liste sans fonction de comparaison KO\n");
             return 1;
@@ -59,8 +59,8 @@ int TstCList(void)
             printf("(CLIST_Create) Test creation d'une liste sans fonction de comparaison OK\n");
         }
 
-        pList2 = CLIST_Create(NULL, &eError);
-        if(pList2 == NULL || eError != CLIST_NO_ERROR)
+        list2 = CLIST_Create(NULL, &error);
+        if(list2 == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_Create) Test creation d'une liste avec fonction de comparaison KO\n");
             return 1;
@@ -73,10 +73,10 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_IsEmpty() sur une liste vide */
     {
-        if(CLIST_IsEmpty(pList1) == false)
+        if(CLIST_IsEmpty(list1) == false)
         {
             printf("(CLIST_IsEmpty) Test sur une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
@@ -86,10 +86,10 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_Size() sur une liste vide */
     {
-        if(CLIST_Size(pList1) != 0)
+        if(CLIST_Size(list1) != 0)
         {
             printf("(CLIST_Size) Test sur une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
@@ -99,85 +99,85 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_InsertFirst() */
     {
-        if(CLIST_InsertFirst(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertFirst(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertFirst) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertFirst) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_InsertFirst(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertFirst(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertFirst) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertFirst) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_InsertNext() */
     {
-        if(CLIST_InsertNext(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertNext(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertNext) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertNext) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_InsertNext(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertNext(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertNext) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertNext) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_InsertPrev() */
     {
-        if(CLIST_InsertPrev(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertPrev(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertPrev) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertPrev) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_InsertPrev(pList1, acChaine[szNbInser], strlen(acChaine[szNbInser]) + 1) == CLIST_NO_ERROR)
+        if(CLIST_InsertPrev(list1, string[nbInser], strlen(string[nbInser]) + 1) == CLIST_NO_ERROR)
         {
             printf("(CLIST_InsertPrev) Test d'insertion OK\n");
-            szNbInser++;
+            nbInser++;
         }
         else
         {
             printf("(CLIST_InsertPrev) Test d'insertion KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_IsEmpty() sur une liste non vide */
     {
-        if(CLIST_IsEmpty(pList1) == true)
+        if(CLIST_IsEmpty(list1) == true)
         {
             printf("(CLIST_IsEmpty) Test sur une liste non vide KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
@@ -187,10 +187,10 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_Size() sur une liste non vide */
     {
-        if(CLIST_Size(pList1) != szNbInser)
+        if(CLIST_Size(list1) != nbInser)
         {
             printf("(CLIST_Size) Test sur une liste non vide KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
@@ -200,1105 +200,1105 @@ int TstCList(void)
 
     /* Test de la fonction CLIST_ReadCurrent() */
     {
-        pcData = CLIST_ReadCurrent(pList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_ReadCurrent(list1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_ReadCurrent) Test lecture de l'element courant d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            if(strcmp(pcData, "Chaine6") == 0)
+            if(strcmp(data, "Chaine6") == 0)
             {
                 printf("(CLIST_ReadCurrent) Test lecture de l'element courant d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_ReadCurrent) Test lecture de l'element courant d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_ReadCurrent(pList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_ReadCurrent(list2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_ReadCurrent) Test lecture de l'element courant d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_ReadCurrent) Test lecture de l'element courant d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction LIST_ReadFirst() */
     {
-        pcData = CLIST_ReadFirst(pList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_ReadFirst(list1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_ReadFirst) Test lecture du premier element d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            if(strcmp(pcData, "Chaine2") == 0)
+            if(strcmp(data, "Chaine2") == 0)
             {
                 printf("(CLIST_ReadFirst) Test lecture du premier element d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_ReadFirst) Test lecture du premier element d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_ReadFirst(pList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_ReadFirst(list2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_ReadFirst) Test lecture du premier element d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_ReadFirst) Test lecture du premier element d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction LIST_ReadNext() */
     {
-        pcData = CLIST_ReadNext(pList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_ReadNext(list1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_ReadNext) Test lecture de l'element suivant d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            if(strcmp(pcData, "Chaine5") == 0)
+            if(strcmp(data, "Chaine5") == 0)
             {
                 printf("(CLIST_ReadNext) Test lecture de l'element suivant d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_ReadNext) Test lecture de l'element suivant d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_ReadNext(pList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_ReadNext(list2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_ReadNext) Test lecture de l'element suivant d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_ReadNext) Test lecture de l'element suivant d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_ReadPrev() */
     {
-        pcData = CLIST_ReadPrev(pList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_ReadPrev(list1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_ReadPrev) Test lecture de l'element precedent d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            if(strcmp(pcData, "Chaine3") == 0)
+            if(strcmp(data, "Chaine3") == 0)
             {
                 printf("(CLIST_ReadPrev) Test lecture de l'element precedent d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_ReadPrev) Test lecture de l'element precedent d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_ReadNext(pList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_ReadNext(list2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_ReadPrev) Test lecture de l'element precedent d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_ReadPrev) Test lecture de l'element precedent d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SeekFirst() */
     {
-        if(CLIST_SeekFirst(pList1) != CLIST_NO_ERROR)
+        if(CLIST_SeekFirst(list1) != CLIST_NO_ERROR)
         {
             printf("(CLIST_SeekFirst) Test de deplacement vers le premier element d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            pcData = CLIST_ReadCurrent(pList1, &eError);
-            if(pcData != NULL && eError == CLIST_NO_ERROR && strcmp(pcData, "Chaine2") == 0)
+            data = CLIST_ReadCurrent(list1, &error);
+            if(data != NULL && error == CLIST_NO_ERROR && strcmp(data, "Chaine2") == 0)
             {
                 printf("(CLIST_SeekFirst) Test de deplacement vers le premier element d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_SeekFirst) Test de deplacement vers le premier element d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        if(CLIST_SeekFirst(pList2) == CLIST_EMPTY_LIST)
+        if(CLIST_SeekFirst(list2) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SeekFirst) Test de deplacement vers le premier element d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SeekFirst) Test de deplacement vers le premier element d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SeekPrev() */
     {
-        if(CLIST_SeekPrev(pList1) != CLIST_NO_ERROR)
+        if(CLIST_SeekPrev(list1) != CLIST_NO_ERROR)
         {
             printf("(CLIST_SeekPrev) Test de deplacement vers l'element precedent d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            pcData = CLIST_ReadCurrent(pList1, &eError);
-            if(pcData != NULL && eError == CLIST_NO_ERROR && strcmp(pcData, "Chaine1") == 0)
+            data = CLIST_ReadCurrent(list1, &error);
+            if(data != NULL && error == CLIST_NO_ERROR && strcmp(data, "Chaine1") == 0)
             {
                 printf("(CLIST_SeekPrev) Test de deplacement vers l'element precedent d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_SeekPrev) Test de deplacement vers ll'element precedent d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        if(CLIST_SeekPrev(pList2) == CLIST_EMPTY_LIST)
+        if(CLIST_SeekPrev(list2) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SeekPrev) Test de deplacement vers l'element precedent d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SeekPrev) Test de deplacement vers l'element precedent d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SeekNext() */
     {
-        if(CLIST_SeekNext(pList1) != CLIST_NO_ERROR)
+        if(CLIST_SeekNext(list1) != CLIST_NO_ERROR)
         {
             printf("(CLIST_SeekNext) Test de deplacement vers l'element suivant d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            pcData = CLIST_ReadCurrent(pList1, &eError);
-            if(pcData != NULL && eError == CLIST_NO_ERROR && strcmp(pcData, "Chaine2") == 0)
+            data = CLIST_ReadCurrent(list1, &error);
+            if(data != NULL && error == CLIST_NO_ERROR && strcmp(data, "Chaine2") == 0)
             {
                 printf("(CLIST_SeekNext) Test de deplacement vers l'element suivant d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_SeekNext) Test de deplacement vers l'element suivant d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        if(CLIST_SeekNext(pList2) == CLIST_EMPTY_LIST)
+        if(CLIST_SeekNext(list2) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SeekNext) Test de deplacement vers l'element suivant d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SeekNext) Test de deplacement vers l'element suivant d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_IsHead() */
     {
         /* on se positionne au bon endroit */
-        CLIST_SeekNext(pList1);
+        CLIST_SeekNext(list1);
 
-        if(CLIST_IsHead(pList1) == false)
+        if(CLIST_IsHead(list1) == false)
         {
-            CLIST_SeekFirst(pList1);
-            if(CLIST_IsHead(pList1) == true)
+            CLIST_SeekFirst(list1);
+            if(CLIST_IsHead(list1) == true)
             {
                 printf("(CLIST_IsHead) Test sur une liste non vide OK\n");
             }
             else
             {
                 printf("(CLIST_IsHead) Test sur une liste non vide KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
         else
         {
             printf("(CLIST_IsHead) Test sur une liste non vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_IsHead(pList2) == false)
+        if(CLIST_IsHead(list2) == false)
         {
             printf("(CLIST_IsHead) Test sur une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_IsHead) Test sur une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_Clone() */
     {
-        pCloneList1 = CLIST_Clone(pList1, &eError);
-        if(pCloneList1 == NULL || eError != CLIST_NO_ERROR)
+        cloneList1 = CLIST_Clone(list1, &error);
+        if(cloneList1 == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_Clone) Test duplication d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
             /* On verifie que tout semble bien se passer */
-            if(CLIST_IsEmpty(pCloneList1) == false && CLIST_Size(pCloneList1) == szNbInser)
+            if(CLIST_IsEmpty(cloneList1) == false && CLIST_Size(cloneList1) == nbInser)
             {
                 printf("(CLIST_Clone) Test duplication d'une liste OK\n");
-                szNbCloneInser = szNbInser;
+                nbCloneInser = nbInser;
             }
             else
             {
                 printf("(CLIST_Clone) Test duplication d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pCloneList2 = CLIST_Clone(pList2, &eError);
-        if(pCloneList2 == NULL || eError != CLIST_NO_ERROR)
+        cloneList2 = CLIST_Clone(list2, &error);
+        if(cloneList2 == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_Clone) Test duplication d'une liste vide KO\n");
-            pCloneList2 = NULL;
-            iResult = 1;
+            cloneList2 = NULL;
+            result = 1;
         }
         else
         {
             /* On verifie que tout semble bien se passer */
-            if(CLIST_IsEmpty(pCloneList2) == true && CLIST_Size(pCloneList2) == 0)
+            if(CLIST_IsEmpty(cloneList2) == true && CLIST_Size(cloneList2) == 0)
             {
                 printf("(CLIST_Clone) Test duplication d'une liste vide OK\n");
             }
             else
             {
                 printf("(CLIST_Clone) Test duplication d'une liste vide KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
     }
 
     /* Test de la fonction CLIST_GetFirst() */
     {
-        pcData = CLIST_GetFirst(pCloneList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_GetFirst(cloneList1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_GetFirst) Test lecture du premier element d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbCloneInser --;
-            if(strcmp(pcData, "Chaine2") == 0)
+            nbCloneInser --;
+            if(strcmp(data, "Chaine2") == 0)
             {
                 printf("(CLIST_GetFirst) Test lecture du premier element d'une liste OK\n");
-                free((void*)pcData), pcData = NULL;
+                free((void*)data), data = NULL;
             }
             else
             {
                 printf("(CLIST_GetFirst) Test lecture du premier element d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_GetFirst(pCloneList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_GetFirst(cloneList2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_GetFirst) Test lecture du premier element d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_GetFirst) Test lecture du premier element d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_GetCurrent() */
     {
-        pcData = CLIST_GetCurrent(pCloneList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_GetCurrent(cloneList1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_GetCurrent) Test lecture d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbCloneInser --;
-            if(strcmp(pcData, "Chaine3") == 0)
+            nbCloneInser --;
+            if(strcmp(data, "Chaine3") == 0)
             {
                 printf("(CLIST_GetCurrent) Test lecture d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_GetCurrent) Test lecture d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_GetCurrent(pCloneList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_GetCurrent(cloneList2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_GetCurrent) Test lecture d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_GetCurrent) Test lecture d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_GetNext() */
     {
-        pcData = CLIST_GetNext(pCloneList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_GetNext(cloneList1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_GetNext) Test lecture d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbCloneInser --;
-            if(strcmp(pcData, "Chaine5") == 0)
+            nbCloneInser --;
+            if(strcmp(data, "Chaine5") == 0)
             {
                 printf("(CLIST_GetNext) Test lecture d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_GetNext) Test lecture d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_GetNext(pCloneList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_GetNext(cloneList2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_GetNext) Test lecture d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_GetNext) Test lecture d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_GetPrev() */
     {
-        pcData = CLIST_GetPrev(pCloneList1, &eError);
-        if(pcData == NULL || eError != CLIST_NO_ERROR)
+        data = CLIST_GetPrev(cloneList1, &error);
+        if(data == NULL || error != CLIST_NO_ERROR)
         {
             printf("(CLIST_GetPrev) Test lecture d'une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbCloneInser --;
-            if(strcmp(pcData, "Chaine1") == 0)
+            nbCloneInser --;
+            if(strcmp(data, "Chaine1") == 0)
             {
                 printf("(CLIST_GetPrev) Test lecture d'une liste OK\n");
             }
             else
             {
                 printf("(CLIST_GetPrev) Test lecture d'une liste KO\n");
-                iResult = 1;
+                result = 1;
             }
         }
 
-        pcData = CLIST_GetPrev(pCloneList2, &eError);
-        if(pcData == NULL && eError == CLIST_EMPTY_LIST)
+        data = CLIST_GetPrev(cloneList2, &error);
+        if(data == NULL && error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_GetPrev) Test lecture d'une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_GetPrev) Test lecture d'une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* On verifie que les elements ont bien ete enleve */
     {
-        if(CLIST_Size(pCloneList1) != szNbCloneInser)
+        if(CLIST_Size(cloneList1) != nbCloneInser)
         {
             printf("(CLIST_GetXXXX) La taille de la liste est incorrecte\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveFirst() */
     {
         /* on se positionne au bon endroit */
-        CLIST_SeekFirst(pList1);
+        CLIST_SeekFirst(list1);
 
-        eError = CLIST_RemoveFirst(pList1);
-        if(eError != CLIST_NO_ERROR)
+        error = CLIST_RemoveFirst(list1);
+        if(error != CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveFirst) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbInser --;
+            nbInser --;
             printf("(CLIST_RemoveFirst) Test suppression dans une liste OK\n");
         }
 
-        eError = CLIST_RemoveFirst(pCloneList2);
-        if(eError == CLIST_EMPTY_LIST)
+        error = CLIST_RemoveFirst(cloneList2);
+        if(error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveFirst) Test suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveFirst) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveCurrent() */
     {
-        eError = CLIST_RemoveCurrent(pList1);
-        if(eError != CLIST_NO_ERROR)
+        error = CLIST_RemoveCurrent(list1);
+        if(error != CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveCurrent) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbInser --;
+            nbInser --;
             printf("(CLIST_RemoveCurrent) Test suppression dans une liste OK\n");
         }
 
-        eError = CLIST_RemoveCurrent(pCloneList2);
-        if(eError == CLIST_EMPTY_LIST)
+        error = CLIST_RemoveCurrent(cloneList2);
+        if(error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveCurrent) Test suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveCurrent) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveNext() */
     {
-        eError = CLIST_RemoveNext(pList1);
-        if(eError != CLIST_NO_ERROR)
+        error = CLIST_RemoveNext(list1);
+        if(error != CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveNext) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbInser --;
+            nbInser --;
             printf("(CLIST_RemoveNext) Test suppression dans une liste OK\n");
         }
 
-        eError = CLIST_RemoveNext(pCloneList2);
-        if(eError == CLIST_EMPTY_LIST)
+        error = CLIST_RemoveNext(cloneList2);
+        if(error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveNext) Test suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveNext) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemovePrev() */
     {
-        eError = CLIST_RemovePrev(pList1);
-        if(eError != CLIST_NO_ERROR)
+        error = CLIST_RemovePrev(list1);
+        if(error != CLIST_NO_ERROR)
         {
             printf("(CLIST_RemovePrev) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
         else
         {
-            szNbInser --;
+            nbInser --;
             printf("(CLIST_RemovePrev) Test suppression dans une liste OK\n");
         }
 
-        eError = CLIST_RemovePrev(pCloneList2);
-        if(eError == CLIST_EMPTY_LIST)
+        error = CLIST_RemovePrev(cloneList2);
+        if(error == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemovePrev) Test suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemovePrev) Test suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* On verifie que les elements ont bien ete enleve */
     {
-        if(CLIST_Size(pList1) != szNbInser)
+        if(CLIST_Size(list1) != nbInser)
         {
             printf("(CLIST_RemoveXXXX) La taille de la liste est incorrecte\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_Destroy() */
     {
-        CLIST_Destroy(pList1);
-        CLIST_Destroy(pList2);
-        CLIST_Destroy(pCloneList1);
-        CLIST_Destroy(pCloneList2);
+        CLIST_Destroy(list1);
+        CLIST_Destroy(list2);
+        CLIST_Destroy(cloneList1);
+        CLIST_Destroy(cloneList2);
 
         printf("(CLIST_Destroy) Test de destruction d'une liste OK\n");
     }
 
     /* Creation des listes de test pour la recherche */
     {
-        pList1 = CLIST_Create(NULL, &eError);
-        pList2 = CLIST_Create(NULL, &eError);
-        if(pList1 == NULL || pList2 == NULL)
+        list1 = CLIST_Create(NULL, &error);
+        list2 = CLIST_Create(NULL, &error);
+        if(list1 == NULL || list2 == NULL)
         {
             printf("Test module liste circulaire : pb creations liste de test\n");
             return 1;
         }
 
-        for(szNbInser = 0; szNbInser < sizeof(acChaineSearch) / sizeof(acChaineSearch[0]); szNbInser++)
+        for(nbInser = 0; nbInser < sizeof(searchedString) / sizeof(searchedString[0]); nbInser++)
         {
-            if(CLIST_InsertNext(pList1, acChaineSearch[szNbInser], strlen(acChaineSearch[szNbInser]) + 1) != CLIST_NO_ERROR)
+            if(CLIST_InsertNext(list1, searchedString[nbInser], strlen(searchedString[nbInser]) + 1) != CLIST_NO_ERROR)
             {
                 printf("Test module liste circulaire : pb creations liste de test\n");
                 return 1;
             }
         }
 
-        pCloneList1 = CLIST_Clone(pList1, &eError);
-        if(pCloneList1 == NULL || eError != CLIST_NO_ERROR)
+        cloneList1 = CLIST_Clone(list1, &error);
+        if(cloneList1 == NULL || error != CLIST_NO_ERROR)
         {
             printf("Test module liste circulaire : pb creations liste de test\n");
-            iResult = 1;
+            result = 1;
         }
 
-        szNbCloneInser = szNbInser;
+        nbCloneInser = nbInser;
 
-        CLIST_SeekFirst(pList1);
-        CLIST_SeekNext(pList1);
-        CLIST_SeekNext(pList1);
-        CLIST_SeekNext(pList1);
-        CLIST_SeekNext(pList1);
+        CLIST_SeekFirst(list1);
+        CLIST_SeekNext(list1);
+        CLIST_SeekNext(list1);
+        CLIST_SeekNext(list1);
+        CLIST_SeekNext(list1);
 
-        CLIST_SeekFirst(pCloneList1);
-        CLIST_SeekNext(pCloneList1);
-        CLIST_SeekNext(pCloneList1);
-        CLIST_SeekNext(pCloneList1);
-        CLIST_SeekNext(pCloneList1);
+        CLIST_SeekFirst(cloneList1);
+        CLIST_SeekNext(cloneList1);
+        CLIST_SeekNext(cloneList1);
+        CLIST_SeekNext(cloneList1);
+        CLIST_SeekNext(cloneList1);
     }
 
 
     /* Test de la fonction CLIST_SetCmp() */
     {
-        CLIST_SetCmp(pList1, TstCompar);
+        CLIST_SetCmp(list1, TstCompar);
         printf("(CLIST_SetCmp) Initialisation de la fonction de comparaison OK\n");
     }
 
     /* Test de la fonction CLIST_SearchData() */
     {
-        if(CLIST_SearchData(pList1, "ChaineB") == CLIST_NO_ERROR)
+        if(CLIST_SearchData(list1, "ChaineB") == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchData(pList1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
+        if(CLIST_SearchData(list1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_SearchData) Test de recherche d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchData) Test de recherche d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchData(pList2, "ChaineB") == CLIST_EMPTY_LIST)
+        if(CLIST_SearchData(list2, "ChaineB") == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchData(pCloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
+        if(CLIST_SearchData(cloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_SearchData) Test de recherche dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SearchDataFct() */
     {
-        if(CLIST_SearchDataFct(pList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_SearchDataFct(list1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataFct(pList1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
+        if(CLIST_SearchDataFct(list1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_SearchDataFct) Test de recherche d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataFct) Test de recherche d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataFct(pList2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
+        if(CLIST_SearchDataFct(list2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataFct(pCloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_SearchDataFct(cloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataFct) Test de recherche dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SearchDataRev() */
     {
-        if(CLIST_SearchDataRev(pList1, "ChaineC") == CLIST_NO_ERROR)
+        if(CLIST_SearchDataRev(list1, "ChaineC") == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRev(pList1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
+        if(CLIST_SearchDataRev(list1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_SearchDataRev) Test de recherche d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRev) Test de recherche d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRev(pList2, "ChaineD") == CLIST_EMPTY_LIST)
+        if(CLIST_SearchDataRev(list2, "ChaineD") == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRev(pCloneList1, "ChaineD") == CLIST_NO_COMP_FONCTION)
+        if(CLIST_SearchDataRev(cloneList1, "ChaineD") == CLIST_NO_COMP_FONCTION)
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRev) Test de recherche dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_SearchDataRevFct() */
     {
-        if(CLIST_SearchDataRevFct(pList1, "ChaineC", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_SearchDataRevFct(list1, "ChaineC", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRevFct(pList1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
+        if(CLIST_SearchDataRevFct(list1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRevFct(pList2, "ChaineD", TstCompar) == CLIST_EMPTY_LIST)
+        if(CLIST_SearchDataRevFct(list2, "ChaineD", TstCompar) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_SearchDataRevFct(pCloneList1, "ChaineD", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_SearchDataRevFct(cloneList1, "ChaineD", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_SearchDataRevFct) Test de recherche dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveData() */
     {
-        if(CLIST_RemoveData(pList1, "ChaineB") == CLIST_NO_ERROR)
+        if(CLIST_RemoveData(list1, "ChaineB") == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste OK\n");
-            szNbInser--;
+            nbInser--;
         }
         else
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveData(pList1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
+        if(CLIST_RemoveData(list1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_RemoveData) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveData) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveData(pList2, "ChaineB") == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveData(list2, "ChaineB") == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveData(pCloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
+        if(CLIST_RemoveData(cloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_RemoveData) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveDataFct() */
     {
-        if(CLIST_RemoveDataFct(pList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveDataFct(list1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste OK\n");
-            szNbInser--;
+            nbInser--;
         }
         else
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataFct(pList1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
+        if(CLIST_RemoveDataFct(list1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_RemoveDataFct) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataFct) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataFct(pList2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveDataFct(list2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataFct(pCloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveDataFct(cloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste sans comparateur OK\n");
-            szNbCloneInser--;
+            nbCloneInser--;
         }
         else
         {
             printf("(CLIST_RemoveDataFct) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveDataRev() */
     {
-        if(CLIST_RemoveDataRev(pList1, "ChaineB") == CLIST_NO_ERROR)
+        if(CLIST_RemoveDataRev(list1, "ChaineB") == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste OK\n");
-            szNbInser--;
+            nbInser--;
         }
         else
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRev(pList1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
+        if(CLIST_RemoveDataRev(list1, "ChaineZ") == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_RemoveDataRev) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataRev) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRev(pList2, "ChaineB") == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveDataRev(list2, "ChaineB") == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRev(pCloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
+        if(CLIST_RemoveDataRev(cloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataRev) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveDataRevFct() */
     {
-        if(CLIST_RemoveDataRevFct(pList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveDataRevFct(list1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste OK\n");
-            szNbInser--;
+            nbInser--;
         }
         else
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRevFct(pList1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
+        if(CLIST_RemoveDataRevFct(list1, "ChaineZ", TstCompar) == CLIST_CELL_NOT_FOUND)
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRevFct(pList2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveDataRevFct(list2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveDataRevFct(pCloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveDataRevFct(cloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste sans comparateur OK\n");
-            szNbCloneInser--;
+            nbCloneInser--;
         }
         else
         {
             printf("(CLIST_RemoveDataRevFct) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* On verifie que les elements ont bien ete enleve */
     {
-        if(CLIST_Size(pList1) != szNbInser)
+        if(CLIST_Size(list1) != nbInser)
         {
-            printf("(CLIST_RemoveDataXXXX) La taille de la liste pList1 est incorrecte\n");
-            iResult = 1;
+            printf("(CLIST_RemoveDataXXXX) La taille de la liste list1 est incorrecte\n");
+            result = 1;
         }
 
 
-        if(CLIST_Size(pCloneList1) != szNbCloneInser)
+        if(CLIST_Size(cloneList1) != nbCloneInser)
         {
-            printf("(CLIST_RemoveDataXXXX) La taille de la liste pCloneList1 est incorrecte\n");
-            iResult = 1;
+            printf("(CLIST_RemoveDataXXXX) La taille de la liste cloneList1 est incorrecte\n");
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveAllData() */
     {
-        if(CLIST_RemoveAllData(pList1, "ChaineB") == CLIST_NO_ERROR)
+        if(CLIST_RemoveAllData(list1, "ChaineB") == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllData(pList1, "ChaineZ") == CLIST_NO_ERROR)
+        if(CLIST_RemoveAllData(list1, "ChaineZ") == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveAllData) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllData) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllData(pList2, "ChaineB") == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveAllData(list2, "ChaineB") == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllData(pCloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
+        if(CLIST_RemoveAllData(cloneList1, "ChaineB") == CLIST_NO_COMP_FONCTION)
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllData) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* Test de la fonction CLIST_RemoveDataFct() */
     {
-        if(CLIST_RemoveAllDataFct(pList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveAllDataFct(list1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllDataFct(pList1, "ChaineZ", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveAllDataFct(list1, "ChaineZ", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression d'un element non present dans une liste OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression d'un element non present dans une liste KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllDataFct(pList2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
+        if(CLIST_RemoveAllDataFct(list2, "ChaineB", TstCompar) == CLIST_EMPTY_LIST)
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste vide OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste vide KO\n");
-            iResult = 1;
+            result = 1;
         }
 
-        if(CLIST_RemoveAllDataFct(pCloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
+        if(CLIST_RemoveAllDataFct(cloneList1, "ChaineB", TstCompar) == CLIST_NO_ERROR)
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste sans comparateur OK\n");
         }
         else
         {
             printf("(CLIST_RemoveAllDataFct) Test de suppression dans une liste sans comparateur KO\n");
-            iResult = 1;
+            result = 1;
         }
     }
 
     /* On verifie que les elements ont bien ete enleve */
     {
-        if(CLIST_Size(pList1) != 3)
+        if(CLIST_Size(list1) != 3)
         {
-            printf("(CLIST_RemoveAllDataXXXX) La taille de la liste pList1 est incorrecte\n");
-            iResult = 1;
+            printf("(CLIST_RemoveAllDataXXXX) La taille de la liste list1 est incorrecte\n");
+            result = 1;
         }
 
-        if(CLIST_Size(pCloneList1) != 3)
+        if(CLIST_Size(cloneList1) != 3)
         {
-            printf("(CLIST_RemoveAllDataXXXX) La taille de la liste pCloneList1 est incorrecte\n");
-            iResult = 1;
+            printf("(CLIST_RemoveAllDataXXXX) La taille de la liste cloneList1 est incorrecte\n");
+            result = 1;
         }
     }
 
     /* Desctruction des listes */
     {
-        CLIST_Destroy(pList1);
-        CLIST_Destroy(pList2);
-        CLIST_Destroy(pCloneList1);
+        CLIST_Destroy(list1);
+        CLIST_Destroy(list2);
+        CLIST_Destroy(cloneList1);
     }
 
-    return iResult;
+    return result;
 }
