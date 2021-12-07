@@ -11,19 +11,6 @@
 
 #include <string.h>
 
-/**
- * @brief Resultat des traitements sur les dates
- */
-typedef enum
-{
-    /// @brief Pas d'erreur
-    DATE_OK,
-    /// @brief Echec de lecture de la date
-    DATE_READ_ERROR,
-    /// @brief Echec de conversion d'une date
-    DATE_CONV_ERROR
-} DATE_Res_e;
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -46,12 +33,9 @@ int DATE_Version(void);
  * @param[in] dateSize Taille maximal de la date
  * @param[in] format Format de la date
  *
- * @return
- *  - DATE_OK : la date a ete lue et formatee avec succes
- *  - DATE_READ_ERROR : erreur de lecture de la date
- *  - DATE_CONV_ERROR : erreur de formatage de la date
+ * @return Date courante (NULL en cas d'erreur)
  */
-DATE_Res_e DATE_GetTodayDate(char* date, size_t dateSize, const char* format);
+const char* DATE_GetTodayDate(char* date, size_t dateSize, const char* format);
 
 #ifdef __cplusplus
 }

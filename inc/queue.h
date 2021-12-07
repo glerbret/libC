@@ -23,12 +23,12 @@ typedef struct queue queue_s;
  */
 typedef enum
 {
-    /// @brief Pas d'erreur
-    QUEUE_NO_ERROR,
-    /// @brief Erreur d'allocation
-    QUEUE_MEMORY_ERROR,
-    /// @brief La file est vide
-    QUEUE_EMPTY_QUEUE
+  /// @brief Pas d'erreur
+  QUEUE_NO_ERROR,
+  /// @brief Erreur d'allocation
+  QUEUE_MEMORY_ERROR,
+  /// @brief La file est vide
+  QUEUE_EMPTY_QUEUE
 } QUEUE_Error_e;
 
 #ifdef __cplusplus
@@ -48,13 +48,10 @@ int QUEUE_Version(void);
 
 /**
  * @brief Creation d'une file
- * @param[out] error Resultat de la creation :
- *                      - QUEUE_NO_ERROR : la creation s'est correctement deroulee
- *                      - QUEUE_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
  *
  * @return File cree (NULL en cas d'erreur).
  */
-queue_s* QUEUE_Create(QUEUE_Error_e* error);
+queue_s* QUEUE_Create(void);
 
 /**
  * @brief Destruction d'une file
@@ -100,25 +97,19 @@ QUEUE_Error_e QUEUE_Enqueue(queue_s* queue, const void* data, size_t dataSize);
  * @brief Lecture et suppression d'un element de la file
  *
  * @param[in,out] queue File
- * @param[out] error Resultat de la lecture :
- *                      - QUEUE_NO_ERROR : la lecture s'est correctement deroulee
- *                      - QUEUE_EMPTY_QUEUE : la file est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* QUEUE_Dequeue(queue_s* queue, QUEUE_Error_e* error);
+const void* QUEUE_Dequeue(queue_s* queue);
 
 /**
  * @brief Lecture d'un element de la file
  *
  * @param[in] queue File
- * @param[out] error Resultat de la lecture :
- *                      - QUEUE_NO_ERROR : la lecture s'est correctement deroulee
- *                      - QUEUE_EMPTY_QUEUE : la file est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* QUEUE_Peek(const queue_s* queue, QUEUE_Error_e* error);
+const void* QUEUE_Peek(const queue_s* queue);
 
 /**
  * @brief Suppression d'un element de la file
@@ -135,13 +126,10 @@ QUEUE_Error_e QUEUE_Remove(queue_s* queue);
  * @brief Duplication d'une file
  *
  * @param[in] queue File a dupliquer
- * @param[out] error Statut de la duplication :
- *                      - QUEUE_NO_ERROR : la copie s'est correctement deroulee
- *                      - QUEUE_ALLOC_QUEUE : le module n'a pas pu allouer assez de memoire
  *
  * @return Copie de la file
  */
-queue_s* QUEUE_Clone(const queue_s* queue, QUEUE_Error_e* error);
+queue_s* QUEUE_Clone(const queue_s* queue);
 
 #ifdef __cplusplus
 }

@@ -23,16 +23,16 @@ typedef struct list list_s;
  */
 typedef enum
 {
-    /// @brief Pas d'erreur
-    LIST_NO_ERROR,
-    /// @brief Erreur d'allocation
-    LIST_MEMORY_ERROR,
-    /// @brief La liste est vide
-    LIST_EMPTY_LIST,
-    /// @brief Element absent
-    LIST_CELL_NOT_FOUND,
-    /// @brief Aucune fonction de comparaison n'est definie
-    LIST_NO_COMP_FONCTION
+  /// @brief Pas d'erreur
+  LIST_NO_ERROR,
+  /// @brief Erreur d'allocation
+  LIST_MEMORY_ERROR,
+  /// @brief La liste est vide
+  LIST_EMPTY_LIST,
+  /// @brief Element absent
+  LIST_CELL_NOT_FOUND,
+  /// @brief Aucune fonction de comparaison n'est definie
+  LIST_NO_COMP_FONCTION
 } LIST_Error_e;
 
 #ifdef __cplusplus
@@ -54,12 +54,10 @@ int LIST_Version(void);
  * @brief Creation d'une liste
  *
  * @param[in] compar Fonction de comparaison des elements
- * @param[out] error Resultat de la creation :
- *                      - CLIST_NO_ERROR : la creation s'est correctement deroulee
- *                      - CLIST_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
+ *
  * @return Liste (NULL en cas d'erreur)
  */
-list_s* LIST_Create(int (*compar)(const void *, const void *), LIST_Error_e* error);
+list_s* LIST_Create(int (*compar)(const void *, const void *));
 
 /**
  * @brief Destruction d'une liste
@@ -224,128 +222,94 @@ LIST_Error_e LIST_SeekPrev(list_s* list);
  * @brief Lecture du premier element
  *
  * @param[in] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_ReadFirst(const list_s* list, LIST_Error_e* error);
+const void* LIST_ReadFirst(const list_s* list);
 
 /**
  * @brief Lecture du dernier element
  *
  * @param[in] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur).
  */
-const void* LIST_ReadLast(const list_s* list, LIST_Error_e* error);
+const void* LIST_ReadLast(const list_s* list);
 
 /**
  * @brief Lecture de l'element courant
  *
  * @param[in] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_ReadCurrent(const list_s* list, LIST_Error_e* error);
+const void* LIST_ReadCurrent(const list_s* list);
 
 /**
  * @brief Lecture de l'element suivant
  *
  * @param[in] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
- *                      - LIST_CELL_NOT_FOUND : l'element courant est le dernier de la liste
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_ReadNext(const list_s* list, LIST_Error_e* error);
+const void* LIST_ReadNext(const list_s* list);
 
 /**
  * @brief Lecture de l'element precedent
  *
  * @param[in] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
- *                      - LIST_CELL_NOT_FOUND : l'element courant est le premier de la liste
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_ReadPrev(const list_s* list, LIST_Error_e* error);
+const void* LIST_ReadPrev(const list_s* list);
 
 /**
  * @brief Lecture et suppression du premier element
  *        Si cet element etait l'element courant, l'element suivant devient le nouvel element courant
  *
  * @param[in,out] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_GetFirst(list_s* list, LIST_Error_e* error);
+const void* LIST_GetFirst(list_s* list);
 
 /**
  * @brief Lecture et suppression du dernier element
  *        Si cet element etait l'element courant, l'element precedent devient le nouvel element courant
  *
  * @param[in,out] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_GetLast(list_s* list, LIST_Error_e* error);
+const void* LIST_GetLast(list_s* list);
 
 /**
  * @brief Lecture et suppression de l'element courant
  *        L'element suivant (ou l'element precedent si l'element courant etait le dernier de la liste) devient l'element courant
  *
  * @param[in,out] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_GetCurrent(list_s* list, LIST_Error_e* error);
+const void* LIST_GetCurrent(list_s* list);
 
 /**
  * @brief Lecture et suppression de l'element suivant
  *
  * @param[in,out] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
- *                      - LIST_CELL_NOT_FOUND : l'element courant est le dernier de la liste
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_GetNext(list_s* list, LIST_Error_e* error);
+const void* LIST_GetNext(list_s* list);
 
 /**
  * @brief Lecture et suppression de l'element precedent
  *
  * @param[in,out] list Liste
- * @param[out] error Resultat de la lecture :
- *                      - LIST_NO_ERROR : la lecture a eut lieu
- *                      - LIST_EMPTY_LIST : la liste est vide
- *                      - LIST_CELL_NOT_FOUND : l'element courant est le premier de la liste
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* LIST_GetPrev(list_s* list, LIST_Error_e* error);
+const void* LIST_GetPrev(list_s* list);
 
 /**
  * @brief Suppression du premier element
@@ -411,13 +375,10 @@ LIST_Error_e LIST_RemovePrev(list_s* list);
  * @brief Duplication d'une liste
  *
  * @param[in] list Liste a dupliquer
- * @param[out] error Statut de la duplication :
- *                      - LIST_NO_ERROR : la copie s'est correctement deroulee
- *                      - LIST_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
  *
- * @return La copie de la liste
+ * @return La copie de la liste (NULL en cas d'erreur)
  */
-list_s* LIST_Clone(const list_s* list, LIST_Error_e* error);
+list_s* LIST_Clone(const list_s* list);
 
 /**
  * @brief Recherche d'un element dans la liste apres l'element courant

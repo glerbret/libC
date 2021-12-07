@@ -9,16 +9,7 @@
 #ifndef GL_MODULUS97_H
 #define GL_MODULUS97_H
 
-/**
- * @brief Resultat de la verification du modulo 97
- */
-typedef enum
-{
-    /// @brief Le modulo 97 est correct
-    MOD97_OK,
-    /// @brief Le modulo 97 est incorrect
-    MOD97_KO
-} MOD97_Res_e;
+#include "bool.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -41,10 +32,10 @@ int MOD97_Version(void);
  * @param[in] number Numero de RIB complet (y comprit la cle)
  *
  * @return
- *  - MOD97_OK si le RIB est correct
- *  - MOD97_KO sinon
+ *  - true si le RIB est correct
+ *  - false sinon
  */
-MOD97_Res_e MOD97_CheckRIBKey(const char* number);
+bool MOD97_CheckRIBKey(const char* number);
 
 /**
  * @brief Calcul de la cle d'un RIB
@@ -62,10 +53,10 @@ int MOD97_CalculateRIBKey(const char* number);
  * @param[in] key Cle du NIR
  *
  * @return
- *  - MOD97_OK si le NIR est correct
- *  - MOD97_KO sinon
+ *  - true si le NIR est correct
+ *  - false sinon
  */
-MOD97_Res_e MOD97_CheckNIRKey(const char* number, int key);
+bool MOD97_CheckNIRKey(const char* number, int key);
 
 /**
  * @brief Calcul de la cle d'un NIR (numero de Securite Sociale)
@@ -83,10 +74,10 @@ int MOD97_CalculateNIRKey(const char* number);
  * @param[in] key Cle du numero
  *
  * @return
- *  - MOD97_OK si le numero est correct
- *  - MOD97_KO sinon
+ *  - true si le numero est correct
+ *  - false sinon
  */
-MOD97_Res_e MOD97_CheckReducedMod97Key(const char* number, int key);
+bool MOD97_CheckReducedMod97Key(const char* number, int key);
 
 /**
  * @brief Calcul d'un modulo 97 reduit
@@ -103,10 +94,10 @@ int MOD97_CalculateReducedMod97Key(const char* number);
  * @param[in] number Numero du cheque suivi de la cle
  *
  * @return
- *  - MOD97_OK si la cle RLMC est correct
- *  - MOD97_KO sinon
+ *  - true si la cle RLMC est correct
+ *  - false sinon
  */
-MOD97_Res_e MOD97_CheckRLMCKey(const char* number);
+bool MOD97_CheckRLMCKey(const char* number);
 
 /**
  * @brief Calcul de la cle RLMC (cle de cheque)

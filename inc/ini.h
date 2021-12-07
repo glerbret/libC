@@ -9,18 +9,9 @@
 #ifndef GL_INI_H
 #define GL_INI_H
 
-#include <stddef.h>
+#include "bool.h"
 
-/**
- * @brief Resultat des traitement sur un fichier .ini
- */
-typedef enum
-{
-    /// @brief Le traitement a reussi
-    INI_OK,
-    /// @brief Le traitement a echoue
-    INI_KO
-} INI_Res_e;
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -48,6 +39,11 @@ int INI_Version(void);
  * @param[in] fileName Nom du fichier .ini
  *
  * @return Nombre de caracteres lus
+ *
+ * @pre readValue n'est pas NULL
+ * @pre maxSize n'est pas nulle
+ * @pre sectionName n'est pas NULL ni vide
+ * @pre keyName n'est pas NULL ni vide
  */
 size_t INI_ReadIni(const char* sectionName, const char* keyName, const char* defaultValue, char* readValue, size_t maxSize, const char* fileName);
 
@@ -60,10 +56,15 @@ size_t INI_ReadIni(const char* sectionName, const char* keyName, const char* def
  * @param[in] fileName Nom du fichier .ini
  *
  * @return
- *  - INI_OK si l'ecriture c'est bien deroulee
- *  - INI_KO sinon
-*/
-INI_Res_e INI_WriteIni(const char* sectionName, const char* keyName, const char* valueToWrite, const char* fileName);
+ *  - true si l'ecriture c'est bien deroulee
+ *  - false sinon
+ *
+ * @pre sectionName n'est pas NULL ni vide
+ * @pre keyName n'est pas NULL ni vide
+ * @pre valueToWrite n'est pas NULL ni vide
+ * @pre fileName n'est pas NULL ni vide
+ */
+bool INI_WriteIni(const char* sectionName, const char* keyName, const char* valueToWrite, const char* fileName);
 
 #ifdef __cplusplus
 }

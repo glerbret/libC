@@ -6,6 +6,7 @@
  */
 
 #include "luhn.h"
+#include "bool.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -26,53 +27,42 @@
 
 static int LUHN_CalculateLuhnSum(const char* number, int toDouble)
 {
-    int idx;
-    int value;
-    int sum  = 0;
+  int sum  = 0;
 
-    for(idx = (int)strlen(number) - 1; idx >= 0; idx--)
+  for(int idx = (int)strlen(number) - 1; idx >= 0; idx--)
+  {
+    int value = (number[idx] - '0') * toDouble;
+    if(value >= 10)
     {
-        value = (number[idx] - '0') * toDouble;
-        if(value >= 10)
-        {
-            value = (value % 10) + 1;
-        }
-        sum += value;
-        toDouble = (toDouble == 2 ? 1 : 2);
+      value = (value % 10) + 1;
     }
-    return sum;
+    sum += value;
+    toDouble = (toDouble == 2 ? 1 : 2);
+  }
+  return sum;
 }
 
 const char* LUHN_Identifier(void)
 {
-    return LUHN_ID;
+  return LUHN_ID;
 }
 
 int LUHN_Version(void)
 {
-    return LUHN_VERS_MAJ * 10000 + LUHN_VERS_MIN * 100 + LUHN_VERS_BRCH;
+  return LUHN_VERS_MAJ * 10000 + LUHN_VERS_MIN * 100 + LUHN_VERS_BRCH;
 }
 
 char LUHN_CalculalteLuhnKey(const char* number)
 {
-    char luhnKey;
-
-    luhnKey = (char)(10 - (LUHN_CalculateLuhnSum(number, 2) % 10));
-    if(luhnKey == 10)
-    {
-        luhnKey = 0;
-    }
-    return (char)(luhnKey + '0');
+  char luhnKey = (char)(10 - (LUHN_CalculateLuhnSum(number, 2) % 10));
+  if(luhnKey == 10)
+  {
+    luhnKey = 0;
+  }
+  return (char)(luhnKey + '0');
 }
 
-LUHN_Res_e LUHN_CheckLuhnKey(const char* number)
+bool LUHN_CheckLuhnKey(const char* number)
 {
-    if((LUHN_CalculateLuhnSum(number, 1) % 10) == 0)
-    {
-        return LUHN_OK;
-    }
-    else
-    {
-        return LUHN_KO;
-    }
+  return (LUHN_CalculateLuhnSum(number, 1) % 10) == 0;
 }

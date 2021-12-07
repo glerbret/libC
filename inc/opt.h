@@ -14,10 +14,10 @@
  */
 typedef enum
 {
-    /// @brief Fonctionnement nominal
-    OPT_FLG_NORM,
-    /// @brief Remise a 0 du compteur
-    OPT_FLG_RESET
+  /// @brief Fonctionnement nominal
+  OPT_FLG_NORM,
+  /// @brief Remise a 0 du compteur
+  OPT_FLG_RESET
 } OPT_Flag_e;
 
 /**
@@ -25,8 +25,8 @@ typedef enum
  */
 typedef enum
 {
-    /// @brief Fin d'analyse des options
-    OPT_END = -1
+  /// @brief Fin d'analyse des options
+  OPT_END = -1
 } OPT_Res_e;
 
 #ifdef __cplusplus

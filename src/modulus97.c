@@ -6,6 +6,7 @@
  */
 
 #include "modulus97.h"
+#include "bool.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -21,144 +22,98 @@
 
 static int MOD97_CalculateModulus97(const char* number)
 {
-    size_t idx;
-    size_t len;
-    int modulus;
+  int modulus = 0;
 
-    /* Longueur du nombre */
-    len = strlen(number);
+  /* Longueur du nombre */
+  const size_t len = strlen(number);
 
-    /* Calcul du modulo */
-    for(idx = 0, modulus = 0; idx < len; idx++)
-    {
-        modulus = ((modulus * 10) + (number[idx] - '0')) % 97;
-    }
+  /* Calcul du modulo */
+  for(size_t idx = 0; idx < len; idx++)
+  {
+    modulus = ((modulus * 10) + (number[idx] - '0')) % 97;
+  }
 
-    return modulus;
+  return modulus;
 }
 
 static int MOD97_CalculateReducedModulus97(const char* number)
 {
-    int modulus97;
-    int reducesModulus97;
-    int r0;
-    int r1;
+  /* Calcul du modulo 97 */
+  const int modulus97 = MOD97_CalculateModulus97(number);
 
-    /* Calcul du modulo 97 */
-    modulus97 = MOD97_CalculateModulus97(number);
-
-    /* Reduction du modulo 97 */
-    r0               = modulus97 % 10;
-    r1               = modulus97 / 10;
-    reducesModulus97 = (r1 + 2 * r0) % 10;
-
-    return reducesModulus97;
+  /* Reduction du modulo 97 */
+  const int r0 = modulus97 % 10;
+  const int r1 = modulus97 / 10;
+  return (r1 + 2 * r0) % 10;
 }
 
 const char* MOD97_Identifier(void)
 {
-    return MOD97_ID;
+  return MOD97_ID;
 }
 
 int MOD97_Version(void)
 {
-    return MOD97_VERS_MAJ * 10000 + MOD97_VERS_MIN * 100 + MOD97_VERS_BRCH;
+  return MOD97_VERS_MAJ * 10000 + MOD97_VERS_MIN * 100 + MOD97_VERS_BRCH;
 }
 
-MOD97_Res_e MOD97_CheckRIBKey(const char* number)
+bool MOD97_CheckRIBKey(const char* number)
 {
-    if(MOD97_CalculateModulus97(number) == 0)
-    {
-        return MOD97_OK;
-    }
-    else
-    {
-        return MOD97_KO;
-    }
+  return MOD97_CalculateModulus97(number) == 0;
 }
 
 int MOD97_CalculateRIBKey(const char* number)
 {
-    int modulus97;
+  /* Calcul du modulo des donnees presente */
+  int modulus97 = MOD97_CalculateModulus97(number);
 
-    /* Calcul du modulo des donnees presente */
-    modulus97 = MOD97_CalculateModulus97(number);
+  /* Calcul de la cle */
+  modulus97 = (modulus97 * 100) % 97;
+  modulus97 = 97 - modulus97;
 
-    /* Calcul de la cle */
-    modulus97 = (modulus97 * 100) % 97;
-    modulus97 = 97 - modulus97;
-
-    return modulus97;
+  return modulus97;
 }
 
-MOD97_Res_e MOD97_CheckNIRKey(const char* number, int key)
+bool MOD97_CheckNIRKey(const char* number, int key)
 {
-    int modulus97;
-
-    modulus97 = MOD97_CalculateModulus97(number);
-
-    if(modulus97 + key == 97)
-    {
-        return MOD97_OK;
-    }
-    else
-    {
-        return MOD97_KO;
-    }
+  const int modulus97 = MOD97_CalculateModulus97(number);
+  return modulus97 + key == 97;
 }
 
 int MOD97_CalculateNIRKey(const char* number)
 {
-    int modulus97;
+  /* Calcul du modulo des donnees presente    */
+  int modulus97 = MOD97_CalculateModulus97(number);
 
-    /* Calcul du modulo des donnees presente    */
-    modulus97 = MOD97_CalculateModulus97(number);
+  /* Calcul de la cle */
+  modulus97 = 97 - modulus97;
 
-    /* Calcul de la cle */
-    modulus97 = 97 - modulus97;
-
-    return modulus97;
+  return modulus97;
 }
 
-MOD97_Res_e MOD97_CheckReducedMod97Key(const char* number, int key)
+bool MOD97_CheckReducedMod97Key(const char* number, int key)
 {
-    if(MOD97_CalculateReducedModulus97(number) == key)
-    {
-        return MOD97_OK;
-    }
-    else
-    {
-        return MOD97_KO;
-    }
+  return MOD97_CalculateReducedModulus97(number) == key;
 }
 
 int MOD97_CalculateReducedMod97Key(const char* number)
 {
-    return MOD97_CalculateReducedModulus97(number);
+  return MOD97_CalculateReducedModulus97(number);
 }
 
-MOD97_Res_e MOD97_CheckRLMCKey(const char* number)
+bool MOD97_CheckRLMCKey(const char* number)
 {
-    if(MOD97_CalculateModulus97(number) == 0)
-    {
-        return MOD97_OK;
-    }
-    else
-    {
-        return MOD97_KO;
-    }
+  return MOD97_CalculateModulus97(number) == 0;
 }
 
 int MOD97_CalculateRLMCKey(const char* number)
 {
-    int modulus97;
+  /* Calcul du modulo des donnees presente */
+  int modulus97 = MOD97_CalculateModulus97(number);
 
-    /* Calcul du modulo des donnees presente */
-    modulus97 = MOD97_CalculateModulus97(number);
+  /* Calcul de la cle */
+  modulus97 = (modulus97 * 100) % 97;
+  modulus97 = 97 - modulus97;
 
-    /* Calcul de la cle */
-    modulus97 = (modulus97 * 100) % 97;
-    modulus97 = 97 - modulus97;
-
-    return modulus97;
+  return modulus97;
 }

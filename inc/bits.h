@@ -32,9 +32,11 @@ int BITS_Version(void);
  * @brief Positionnement d'un bit dans un byte
  *
  * @param[in] byte Valeur originale du byte
- * @param[in] bitNumber Position du bit a positionner (CHAR_BIT MSB - 0 LSB)
+ * @param[in] bitNumber Position du bit a positionner (CHAR_BIT-1 MSB - 0 LSB)
  *
  * @return Valeur finale du byte
+ *
+ * @pre bitNumber est strictement inferieur a CHAR_BIT
  */
 unsigned char BITS_SetBit(unsigned char byte, size_t bitNumber);
 
@@ -42,9 +44,11 @@ unsigned char BITS_SetBit(unsigned char byte, size_t bitNumber);
  * @brief Suppression d'un bit dans un byte
  *
  * @param[in] byte Valeur originale du byte
- * @param[in] bitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
+ * @param[in] bitNumber Position du bit a baisser (CHAR_BIT-1 MSB - 0 LSB)
  *
  * @return Valeur finale du byte
+ *
+ * @pre bitNumber est strictement inferieur a CHAR_BIT
  */
 unsigned char BITS_ClearBit(unsigned char byte, size_t bitNumber);
 
@@ -52,11 +56,13 @@ unsigned char BITS_ClearBit(unsigned char byte, size_t bitNumber);
  * @brief Test d'un bit dans un byte
  *
  * @param[in] byte Valeur originale du byte
- * @param[in] bitNumber Position du bit a baisser (CHAR_BIT MSB - 0 LSB)
+ * @param[in] bitNumber Position du bit a baisser (CHAR_BIT-1 MSB - 0 LSB)
  *
  * @return
  *  - true si le bit est positionne
  *  - false sinon
+ *
+ * @pre bitNumber est strictement inferieur a CHAR_BIT
  */
 bool BITS_TestBit(unsigned char byte, size_t bitNumber);
 

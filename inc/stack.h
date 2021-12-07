@@ -23,12 +23,12 @@ typedef struct stack stack_s;
  */
 typedef enum
 {
-    /// @brief Pas d'erreur
-    STACK_NO_ERROR,
-    /// @brief Erreur d'allocation
-    STACK_MEMORY_ERROR,
-    /// @brief La pile est vide
-    STACK_EMPTY_STACK
+  /// @brief Pas d'erreur
+  STACK_NO_ERROR,
+  /// @brief Erreur d'allocation
+  STACK_MEMORY_ERROR,
+  /// @brief La pile est vide
+  STACK_EMPTY_STACK
 } STACK_Error_e;
 
 #ifdef __cplusplus
@@ -49,13 +49,9 @@ int STACK_Version(void);
 /**
  * @brief Creation d'une pile
  *
- * @param[out] error Resultat de la creation :
- *                      - STACK_NO_ERROR : la creation s'est correctement deroulee
- *                      - STACK_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
- *
  * @return Pile cree (NULL en cas d'erreur)
  */
-stack_s* STACK_Create(STACK_Error_e* error);
+stack_s* STACK_Create(void);
 
 /**
  * @brief Destruction d'une pile
@@ -101,25 +97,19 @@ STACK_Error_e STACK_Push(stack_s* stack, const void* data, size_t dataSize);
  * @brief Lecture et suppression d'un element de la pile
  *
  * @param[in,out] stack Pile
- * @param[out] error Resultat de la lecture :
- *                      - STACK_NO_ERROR : la lecture s'est correctement deroulee
- *                      - STACK_EMPTY_STACK : la pile est vide
  *
  * @return Element lu (NULL en cas d'erreur).
  */
-const void* STACK_Pop(stack_s* stack, STACK_Error_e* error);
+const void* STACK_Pop(stack_s* stack);
 
 /**
  * @brief Lecture d'un element de la pile
  *
  * @param[in] stack Pile
- * @param[out] error Resultat de la lecture :
- *                      - STACK_NO_ERROR : la lecture s'est correctement deroulee
- *                      - STACK_EMPTY_STACK : la pile est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* STACK_Peek(const stack_s* stack, STACK_Error_e* error);
+const void* STACK_Peek(const stack_s* stack);
 
 /**
  * @brief Suppression d'un element de la pile
@@ -136,12 +126,10 @@ STACK_Error_e STACK_Remove(stack_s* stack);
  * @brief Duplication d'une pile
  *
  * @param[in] stack Pile
- * @param[out] error Statut de la duplication :
- *                      - STACK_NO_ERROR : la copie s'est correctement deroulee
- *                      - STACK_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
+ *
  * @return La copie de la pile.
  */
-stack_s* STACK_Clone(const stack_s* stack, STACK_Error_e* error);
+stack_s* STACK_Clone(const stack_s* stack);
 
 #ifdef __cplusplus
 }

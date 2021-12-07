@@ -9,16 +9,7 @@
 #ifndef GL_LUHN_H
 #define GL_LUHN_H
 
-/**
- * @brief Resultat de la verification de la cle de Luhn
- */
-typedef enum
-{
-    /// @brief La cle de Luhn est correcte
-    LUHN_OK,
-    /// @brief La cle de Luhn est incorrecte
-    LUHN_KO
-} LUHN_Res_e;
+#include "bool.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -50,10 +41,10 @@ char LUHN_CalculalteLuhnKey(const char* number);
  * @param[in] number Numero a verifier
  *
  * @return
- *  - LUHN_OK pour une cle de Luhn correcte
- *  - LUHN_KO sinon
+ *  - true pour une cle de Luhn correcte
+ *  - false sinon
  */
-LUHN_Res_e LUHN_CheckLuhnKey(const char* number);
+bool LUHN_CheckLuhnKey(const char* number);
 
 #ifdef __cplusplus
 }

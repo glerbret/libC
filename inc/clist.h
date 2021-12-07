@@ -23,16 +23,16 @@ typedef struct clist clist_s;
  */
 typedef enum
 {
-    /// @brief Pas d'erreur
-    CLIST_NO_ERROR,
-    /// @brief Erreur d'allocation
-    CLIST_MEMORY_ERROR,
-    /// @brief La liste est vide
-    CLIST_EMPTY_LIST,
-    /// @brief Element absent
-    CLIST_CELL_NOT_FOUND,
-    /// @brief Aucune fonction de comparaison n'est definie
-    CLIST_NO_COMP_FONCTION
+  /// @brief Pas d'erreur
+  CLIST_NO_ERROR,
+  /// @brief Erreur d'allocation
+  CLIST_MEMORY_ERROR,
+  /// @brief La liste est vide
+  CLIST_EMPTY_LIST,
+  /// @brief Element absent
+  CLIST_CELL_NOT_FOUND,
+  /// @brief Aucune fonction de comparaison n'est definie
+  CLIST_NO_COMP_FONCTION
 } CLIST_Error_e;
 
 #ifdef __cplusplus
@@ -54,13 +54,10 @@ int CLIST_Version(void);
  * @brief Creation d'une liste circulaire
  *
  * @param[in] compar Fonction de comparaison des elements
- * @param[out] error Resultat de la creation :
- *      - CLIST_NO_ERROR : la creation s'est correctement deroulee
- *      - CLIST_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
  *
  * @return  Liste circulaire (NULL en cas d'erreur)
  */
-clist_s* CLIST_Create(int (*compar)(const void *, const void *), CLIST_Error_e* error);
+clist_s* CLIST_Create(int (*compar)(const void *, const void *));
 
 /**
  * @brief Destruction d'une liste circulaire
@@ -186,99 +183,75 @@ CLIST_Error_e CLIST_SeekPrev(clist_s* list);
  * @brief Lecture du premier element
  *
  * @param[in] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                  - CLIST_NO_ERROR : la lecture a eut lieu
- *                  - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_ReadFirst(const clist_s* list, CLIST_Error_e* error);
+const void* CLIST_ReadFirst(const clist_s* list);
 
 /**
  * @brief Lecture de l'element courant
  *
  * @param[in] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_ReadCurrent(const clist_s* list, CLIST_Error_e* error);
+const void* CLIST_ReadCurrent(const clist_s* list);
 
 /**
  * @brief Lecture de l'element suivant
  *
  * @param[in] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_ReadNext(const clist_s* list, CLIST_Error_e* error);
+const void* CLIST_ReadNext(const clist_s* list);
 
 /**
  * @brief Lecture de l'element precedent
  *
  * @param[in] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_ReadPrev(const clist_s* list, CLIST_Error_e* error);
+const void* CLIST_ReadPrev(const clist_s* list);
 
 /**
  * @brief Lecture et suppression du premier element
  *        Si cet element etait l'element courant, l'element suivant devient le nouvel element courant
  *
  * @param[in,out] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_GetFirst(clist_s* list, CLIST_Error_e* error);
+const void* CLIST_GetFirst(clist_s* list);
 
 /**
  * @brief Lecture et suppression de l'element courant
  *        L'element suivant devient l'element courant
  *
  * @param[in,out] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_GetCurrent(clist_s* list, CLIST_Error_e* error);
+const void* CLIST_GetCurrent(clist_s* list);
 
 /**
  * @brief Lecture et suppression de l'element suivant
  *
  * @param[in,out] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
  */
-const void* CLIST_GetNext(clist_s* list, CLIST_Error_e* error);
+const void* CLIST_GetNext(clist_s* list);
 
 /**
  * @brief Lecture et suppression de l'element precedent
  *
  * @param[in,out] list Liste circulaire
- * @param[out] error Resultat de la lecture :
- *                      - CLIST_NO_ERROR : la lecture a eut lieu
- *                      - CLIST_EMPTY_LIST : la liste est vide
  *
  * @return Element lu (NULL en cas d'erreur)
 */
-const void* CLIST_GetPrev(clist_s* list, CLIST_Error_e* error);
+const void* CLIST_GetPrev(clist_s* list);
 
 /**
  * @brief Suppression du premier element
@@ -329,12 +302,10 @@ CLIST_Error_e CLIST_RemovePrev(clist_s* list);
  * @brief Duplication d'une liste
  *
  * @param[in] list Liste a dupliquer
- * @param[out] error Statut de la duplication:
- *                      - CLIST_NO_ERROR : la copie s'est correctement deroulee
- *                      - CLIST_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire
+ *
  * @return La copie de la liste
  */
-clist_s* CLIST_Clone(const clist_s* list, CLIST_Error_e* error);
+clist_s* CLIST_Clone(const clist_s* list);
 
 /**
  * @brief Recherche d'un element dans la liste

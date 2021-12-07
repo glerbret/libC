@@ -21,33 +21,33 @@
 
 const char* DATE_Identifier(void)
 {
-    return DATE_ID;
+  return DATE_ID;
 }
 
 int DATE_Version(void)
 {
-    return DATE_VERS_MAJ * 10000 + DATE_VERS_MIN * 100 + DATE_VERS_BRCH;
+  return DATE_VERS_MAJ * 10000 + DATE_VERS_MIN * 100 + DATE_VERS_BRCH;
 }
 
-DATE_Res_e DATE_GetTodayDate(char* date, size_t dateSize, const char* format)
+const char* DATE_GetTodayDate(char* date, size_t dateSize, const char* format)
 {
-    time_t dateBin;
-    struct tm* dateStruct;
+  time_t dateBin;
+  struct tm* dateStruct;
 
-    setlocale(LC_ALL, "");
+  setlocale(LC_ALL, "");
 
-    /* Lecture de la date */
-    if(time(&dateBin) == (time_t) -1)
-    {
-        return DATE_READ_ERROR;
-    }
+  /* Lecture de la date */
+  if(time(&dateBin) == (time_t) -1)
+  {
+    return NULL;
+  }
 
-    /* Formatage de la date */
-    dateStruct = localtime(&dateBin);
-    if (strftime(date, dateSize, format, dateStruct) == (size_t) 0)
-    {
-        return DATE_CONV_ERROR;
-    }
+  /* Formatage de la date */
+  dateStruct = localtime(&dateBin);
+  if (strftime(date, dateSize, format, dateStruct) == (size_t) 0)
+  {
+    return NULL;
+  }
 
-    return DATE_OK;
+  return date;
 }
