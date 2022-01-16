@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Fichier de traces
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Fichier de traces.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "traces.h"

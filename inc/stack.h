@@ -1,9 +1,9 @@
 /**
- * @author Gregory Lerbret
  * @file
- * @brief Gestion de piles
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Gestion de piles.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #ifndef GL_STACK_H
@@ -14,20 +14,20 @@
 #include <stddef.h>
 
 /**
- * @brief Structure de la pile
+ * @brief Structure de la pile.
  */
 typedef struct stack stack_s;
 
 /**
- * @brief Resultat des traitements sur les piles
+ * @brief Resultat des traitements sur les piles.
  */
 typedef enum
 {
-  /// @brief Pas d'erreur
+  /// @brief Pas d'erreur.
   STACK_NO_ERROR,
-  /// @brief Erreur d'allocation
+  /// @brief Erreur d'allocation.
   STACK_MEMORY_ERROR,
-  /// @brief La pile est vide
+  /// @brief La pile est vide.
   STACK_EMPTY_STACK
 } STACK_Error_e;
 
@@ -37,97 +37,94 @@ extern "C"
 #endif
 
 /**
- * @return Identifiant du module (nom et version)
+ * @return Identifiant du module (nom et version).
  */
 const char* STACK_Identifier(void);
 
 /**
- * @return Version du module
+ * @return Version du module.
  */
 int STACK_Version(void);
 
 /**
- * @brief Creation d'une pile
+ * @brief Cree une pile.
  *
- * @return Pile cree (NULL en cas d'erreur)
+ * @return Pile cree (NULL en cas d'erreur).
  */
 stack_s* STACK_Create(void);
 
 /**
- * @brief Destruction d'une pile
+ * @brief Destruit une pile.
  *
- * @param[in] stack Pile
+ * @param[in] stack   Pile a detruire.
  */
 void STACK_Destroy(stack_s* stack);
 
 /**
- * @brief Verification de la vacuite de la pile
+ * @brief Verifie la vacuite de la pile.
  *
- * @param[in] stack Pile
+ * @param[in] stack   Pile.
  *
- * @return
- *  - TRUE si la pile est vide
- *  - FALSE sinon
+ * @retval true   Pile vide.
+ * @retval false  Au moins un element dans la pile.
  */
 bool STACK_IsEmpty(const stack_s* stack);
 
 /**
- * @brief Calcul du nombre d'element de la pile
+ * @brief Calcule le nombre d'elements de la pile.
  *
- * @param[in] stack Pile
+ * @param[in] stack   Pile.
  *
- * @return Nombre d'element de la pile
+ * @return Nombre d'elements de la pile.
  */
 size_t STACK_Size(const stack_s* stack);
 
 /**
- * @brief Ajout d'un element a la pile
+ * @brief Ajoute un element a la pile.
  *
- * @param[in,out] stack Pile
- * @param[in] data Element a ajouter
- * @param[in] dataSize Taille de l'element
+ * @param[in,out] stack Pile.
+ * @param[in] data      Element a ajouter.
+ * @param[in] dataSize  Taille de l'element.
  *
- * @return
- *  - STACK_NO_ERROR : l'ajout s'est correctement deroule
- *  - STACK_MEMORY_ERROR : le module n'a pas pu allouer assez de memoire ou il n'existe pas de donnee a inserer
+ * @retval STACK_NO_ERROR     Ajout reussi.
+ * @retval STACK_MEMORY_ERROR Erreur d'allocation ou pas d'element a inserer.
  */
 STACK_Error_e STACK_Push(stack_s* stack, const void* data, size_t dataSize);
 
 /**
- * @brief Lecture et suppression d'un element de la pile
+ * @brief Lit et supprime un element de la pile.
  *
- * @param[in,out] stack Pile
+ * @param[in,out] stack   Pile.
  *
  * @return Element lu (NULL en cas d'erreur).
  */
 const void* STACK_Pop(stack_s* stack);
 
 /**
- * @brief Lecture d'un element de la pile
+ * @brief Lit un element de la pile.
  *
- * @param[in] stack Pile
+ * @param[in] stack   Pile.
  *
- * @return Element lu (NULL en cas d'erreur)
+ * @return Element lu (NULL en cas d'erreur).
  */
 const void* STACK_Peek(const stack_s* stack);
 
 /**
- * @brief Suppression d'un element de la pile
+ * @brief Supprime un element de la pile.
  *
- * @param[in,out] stack Pile
+ * @param[in,out] stack   Pile.
  *
- * @return
- *  - STACK_NO_ERROR : la suppression s'est correctement deroulee
- *  - STACK_EMPTY_STACK : la pile est vide
+ * @retval STACK_NO_ERROR     Suppression reussie.
+ * @retval STACK_EMPTY_STACK  Pile vide.
  */
 STACK_Error_e STACK_Remove(stack_s* stack);
 
 /**
- * @brief Duplication d'une pile
+ * @brief Duplique d'une pile.
  *
- * @param[in] stack Pile
+ * @param[in] stack   Pile.
  *
- * @return La copie de la pile.
+ * @return Copie de la pile.
  */
 stack_s* STACK_Clone(const stack_s* stack);
 

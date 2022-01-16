@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Gestion des bits
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Gestion des bits.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "bits.h"

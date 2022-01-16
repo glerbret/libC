@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Gestion de piles
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Gestion de piles.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "stack.h"

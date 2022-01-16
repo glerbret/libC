@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Calcul et de controle des cles de Luhn
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Calcul et de controle des cles de Luhn.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "luhn.h"

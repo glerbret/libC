@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Calcul et de controle des modulo 97
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Calcul et de controle des modulo 97.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "modulus97.h"

@@ -1,9 +1,9 @@
 /**
- * @author Gregory Lerbret
  * @file
- * @brief Calcul et de controle des modulo 97
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Calcul et de controle des modulo 97.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #ifndef GL_MODULUS97_H
@@ -17,92 +17,88 @@ extern "C"
 #endif
 
 /**
- * @return Identifiant du module (nom et version)
+ * @return Identifiant du module (nom et version).
  */
 const char* MOD97_Identifier(void);
 
 /**
- * @return Version du module
+ * @return Version du module.
  */
 int MOD97_Version(void);
 
 /**
- * @brief Verification de la validite d'un RIB
+ * @brief Verifie la validite d'un RIB.
  *
- * @param[in] number Numero de RIB complet (y comprit la cle)
+ * @param[in] number  Numero de RIB complet (y comprit la cle).
  *
- * @return
- *  - true si le RIB est correct
- *  - false sinon
+ * @retval true   RIB valide.
+ * @retval false  RIB invalide.
  */
 bool MOD97_CheckRIBKey(const char* number);
 
 /**
- * @brief Calcul de la cle d'un RIB
+ * @brief Calcule la cle d'un RIB.
  *
- * @param[in] number Numero de RIB sans la cle
+ * @param[in] number  Numero de RIB sans la cle.
  *
- * @return Cle RIB
+ * @return Cle RIB.
  */
 int MOD97_CalculateRIBKey(const char* number);
 
 /**
- * @brief Verification de la validite d'un NIR (Numero de Securite Sociale)
+ * @brief Verifie la validite d'un NIR (Numero de Securite Sociale).
  *
- * @param[in] number Numero de NIR sans la cle
- * @param[in] key Cle du NIR
+ * @param[in] number  Numero de NIR sans la cle.
+ * @param[in] key     Cle du NIR.
  *
- * @return
- *  - true si le NIR est correct
- *  - false sinon
+ * @retval true   NIR valide.
+ * @retval false  NIR invalide
  */
 bool MOD97_CheckNIRKey(const char* number, int key);
 
 /**
- * @brief Calcul de la cle d'un NIR (numero de Securite Sociale)
+ * @brief Calcule la cle d'un NIR (numero de Securite Sociale).
  *
- * @param[in] number Numero de NIR sans la cle
+ * @param[in] number  Numero de NIR sans la cle.
  *
- * @return Cle NIR
+ * @return Cle NIR.
  */
 int MOD97_CalculateNIRKey(const char* number);
 
 /**
- * @brief Verification de la validite d'un modulo 97 reduit
+ * @brief Verifie la validite d'un modulo 97 reduit.
  *
- * @param[in] number Numero a verifier (cle non comprise)
- * @param[in] key Cle du numero
+ * @param[in] number  Numero a verifier (cle non comprise).
+ * @param[in] key     Cle du numero.
  *
- * @return
- *  - true si le numero est correct
- *  - false sinon
+ * @retval true   Cle valide.
+ * @retval false  Cle invalide
  */
 bool MOD97_CheckReducedMod97Key(const char* number, int key);
 
 /**
- * @brief Calcul d'un modulo 97 reduit
+ * @brief Calcule un modulo 97 reduit.
  *
- * @param[in] number Numero sur lequel calculer la cle
+ * @param[in] number  Numero sur lequel calculer la cle.
  *
- * @return Cle
+ * @return Cle.
  */
 int MOD97_CalculateReducedMod97Key(const char* number);
 
 /**
- * @brief Verification de la validite d'une cle RLMC (cle de cheque)
+ * @brief Verifie la validite d'une cle RLMC (cle de cheque).
  *
- * @param[in] number Numero du cheque suivi de la cle
+ * @param[in] number  Numero du cheque suivi de la cle.
  *
- * @return
- *  - true si la cle RLMC est correct
- *  - false sinon
+ * @retval true   Cle RLMC valide.
+ * @retval false  Cle RLMC invalide
  */
 bool MOD97_CheckRLMCKey(const char* number);
 
 /**
- * @brief Calcul de la cle RLMC (cle de cheque)
+ * @brief Calcule la cle RLMC (cle de cheque).
  *
- * @param[in] number Numero du cheque
+ * @param[in] number  Numero du cheque.
  *
  * @return Cle RLMC.
  */

@@ -1,9 +1,9 @@
 /**
- * @author Gregory Lerbret
  * @file
- * @brief Fichier de traces
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Fichier de traces.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #ifndef GL_TRACE_H
@@ -11,7 +11,7 @@
 
 /// @cond
 /**
- * @brief Niveau de trace
+ * @brief Niveau de trace.
  */
 typedef enum
 {
@@ -30,20 +30,20 @@ extern "C"
 #endif
 
 /**
- * @return Identifiant du module (nom et version)
+ * @return Identifiant du module (nom et version).
  */
 const char* TRACE_Identifier(void);
 
 /**
- * @return Version du module
+ * @return Version du module.
  */
 int TRACE_Version(void);
 
 /**
- * @brief Ajout d'une trace dans le fichier LogXXXX (XXXXX represente la date du jour)
+ * @brief Ajoute une trace dans le fichier LogXXXX (XXXXX represente la date du jour).
  *
- * @param[in] level Niveau de la trace
- * @param[in] format Format de la trace
+ * @param[in] level   Niveau de la trace.
+ * @param[in] format  Format de la trace.
  */
 void TRACE_ReportTrace(TRACE_Niveau_e level, const char* format, ... );
 

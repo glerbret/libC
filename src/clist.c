@@ -1,8 +1,8 @@
 /**
- * @author Gregory Lerbret
- * @brief Gestion de listes circulaires
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Gestion de listes circulaires.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #include "clist.h"

@@ -1,9 +1,9 @@
 /**
- * @author Gregory Lerbret
  * @file
- * @brief Type booleen
- * @version 1.0
- * @copyright MIT license
+ * @brief Type booleen.
+ * @version 1.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #ifndef GL_BOOL_H

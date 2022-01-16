@@ -1,9 +1,9 @@
 /**
- * @author Gregory Lerbret
  * @file
- * @brief Gestion du chaset EBCDIC
- * @version 1.0.0
- * @copyright MIT license
+ * @brief Gestion du chaset EBCDIC.
+ * @version 1.0.0.
+ * @copyright MIT license.
+ * @author Gregory Lerbret.
  */
 
 #ifndef GL_EBCDIC_H
@@ -15,30 +15,30 @@ extern "C"
 #endif
 
 /**
- * @return Identifiant du module (nom et version)
+ * @return Identifiant du module (nom et version).
  */
 const char* EBCDIC_Identifier(void);
 
 /**
- * @return Version du module
+ * @return Version du module.
  */
 int EBCDIC_Version(void);
 
 /**
- * @brief Conversion ASCI vers EBCDIC
+ * @brief Convertit un caractere ASCII en EBCDIC.
  *
- * @param[in] ascii Caractere au format ASCII
+ * @param[in] ascii Caractere au format ASCII.
  *
  * @return Caractere au format EBCDIC.
  */
 int EBCDIC_ConvertASCII2EBCDIC(int ascii);
 
 /**
- * @brief Conversion EBCDIC vers ASCII
+ * @brief Convertit un caractere EBCDIC en ASCII.
  *
- * @param[in] ebcdic Caractere au format EBCDIC
+ * @param[in] ebcdic Caractere au format EBCDIC.
  *
- * @return Caractere au format ASCII
+ * @return Caractere au format ASCII.
  */
 int EBCDIC_ConvertEBCDIC2ASCII(int ebcdic);
 
