@@ -63,13 +63,13 @@ int TstLuhn(void)
   /* test de la fonction de calcul */
   for(size_t idx = 0; idx < (sizeof(testCard) / sizeof(testCard[0])); idx++)
   {
-    if(LUHN_CalculalteLuhnKey(testCard[idx].number) == testCard[idx].key)
+    if(LUHN_CalculateLuhnKey(testCard[idx].number) == testCard[idx].key)
     {
-      printf("(LUHN_CalculalteLuhnKey) test calcul %d OK\n", (int)(idx + 1));
+      printf("(LUHN_CalculateLuhnKey) test calcul %d OK\n", (int)(idx + 1));
     }
     else
     {
-      printf("(LUHN_CalculalteLuhnKey) test calcul %d KO", (int)(idx + 1));
+      printf("(LUHN_CalculateLuhnKey) test calcul %d KO", (int)(idx + 1));
       result = 1;
     }
   }

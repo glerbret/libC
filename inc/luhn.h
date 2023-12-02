@@ -33,7 +33,7 @@ int LUHN_Version(void);
  *
  * @return Cle de Luhn sous sa forme ASCII.
  */
-char LUHN_CalculalteLuhnKey(const char* number);
+char LUHN_CalculateLuhnKey(const char* number);
 
 /**
  * @brief Verifie la cle de Luhn.

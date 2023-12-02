@@ -20,11 +20,6 @@
 #define LUHN_VERS_BRCH  0
 #define LUHN_ID		    LUHN_NAME " - Version " xstr(LUHN_VERS_MAJ) "." xstr(LUHN_VERS_MIN) "." xstr(LUHN_VERS_BRCH)
 
-/// @todo revoir le passage de toDouble dans LUHN_CalculateLuhnSum. Plutôt une info cle presente/non presente
-/// @todo Preciser contrainte : ce sont des chaînes de caracteres
-/// @todo LUHN_CalculalteLuhnKey ==> LUHN_CalculateLuhnKey
-/// @todo Dans LUHN_CalculalteLuhnKey pourquoi utiliser un char et non un int ?
-
 static int LUHN_CalculateLuhnSum(const char* number, int toDouble)
 {
   int sum  = 0;
@@ -52,7 +47,7 @@ int LUHN_Version(void)
   return LUHN_VERS_MAJ * 10000 + LUHN_VERS_MIN * 100 + LUHN_VERS_BRCH;
 }
 
-char LUHN_CalculalteLuhnKey(const char* number)
+char LUHN_CalculateLuhnKey(const char* number)
 {
   char luhnKey = (char)(10 - (LUHN_CalculateLuhnSum(number, 2) % 10));
   if(luhnKey == 10)
